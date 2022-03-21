@@ -12,6 +12,8 @@ SOURCES += \
     editorDock.cpp \
     main.cpp \
     mainwindow.cpp \
+    renderArea.cpp \
+    transformationDock.cpp \
     ui.cpp
 
 HEADERS += \

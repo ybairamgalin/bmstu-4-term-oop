@@ -15,5 +15,6 @@ public:
 
 private:
     ui_t *ui;
+    const QSize minWindowSize = QSize(1000, 800);
 };
 #endif // MAINWINDOW_H

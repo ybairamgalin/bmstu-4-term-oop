@@ -64,8 +64,9 @@ editorDock_t *editorDockCreate(QWidget *parent)
     editorDock_t *editorDock = new editorDock_t;
 
     editorDock->dock = new QDockWidget(parent);
-    editorDock->dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+    editorDock->dock->setAllowedAreas(Qt::RightDockWidgetArea);
     editorDock->dock->setWindowTitle("Редактор фигуры");
+    editorDock->dock->setMinimumWidth(DOCK_WIDTH);
 
     allocateFields(editorDock);
     placeFields(editorDock);

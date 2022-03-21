@@ -5,7 +5,8 @@ ui_t *uiCreate(QMainWindow *parent)
     ui_t *ui = new ui_t;
 
     ui->editorDock = editorDockCreate(parent);
-    parent->addDockWidget(Qt::LeftDockWidgetArea, editorGetDock(ui->editorDock));
+    ui->transformationDock = transformationDockCreate(parent);
+    ui->renderArea = renderAreaCreate();
 
     return ui;
 }
@@ -13,4 +14,20 @@ ui_t *uiCreate(QMainWindow *parent)
 void uiDelete(ui_t *ui)
 {
     editorDockDelete(ui->editorDock);
+    transformationDockDelete(ui->transformationDock);
+}
+
+QWidget *getRenderArea(ui_t *ui)
+{
+    return getPaintArea(ui->renderArea);
+}
+
+QDockWidget *getEditorDock(ui_t *ui)
+{
+    return editorGetDock(ui->editorDock);
+}
+
+QDockWidget *getTransformationDock(ui_t *ui)
+{
+    return tranformationGetDock(ui->transformationDock);
 }

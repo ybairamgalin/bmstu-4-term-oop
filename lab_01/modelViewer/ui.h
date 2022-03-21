@@ -20,4 +20,8 @@ typedef  ui ui_t;
 ui_t *uiCreate(QMainWindow *parent = nullptr);
 void uiDelete(ui_t *ui);
 
+QWidget *getRenderArea(ui_t *ui);
+QDockWidget *getEditorDock(ui_t *ui);
+QDockWidget *getTransformationDock(ui_t *ui);
+
 #endif // UI_H

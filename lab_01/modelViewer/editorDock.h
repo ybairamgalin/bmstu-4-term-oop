@@ -8,6 +8,10 @@
 #include <QGridLayout>
 #include <QListWidget>
 
+#ifndef DOCK_WIDTH
+#define DOCK_WIDTH 300
+#endif
+
 struct editorDock
 {
     QDockWidget *dock;
@@ -28,7 +32,7 @@ struct editorDock
     QPushButton *deleteEdgeButton;
 };
 
-typedef editorDock editorDock_t;
+typedef struct editorDock editorDock_t;
 
 editorDock_t *editorDockCreate(QWidget *parent);
 void editorDockDelete(editorDock_t *editorDock);
