@@ -1,5 +1,13 @@
 #include "point3d.h"
 
+point3d point3dInit(const double x, const double y,
+                    const double z)
+{
+    point3d point = {x, y, z};
+
+    return point;
+}
+
 point3d *point3dCreate(const double x, const double y,
                        const double z)
 {

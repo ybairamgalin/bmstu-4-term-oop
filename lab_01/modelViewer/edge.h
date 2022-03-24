@@ -11,4 +11,6 @@ struct edge
 
 typedef struct edge edge_t;
 
+edge_t edgeInit(const point3d p1, const point3d p2);
+
 #endif // EDGE_H

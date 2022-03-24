@@ -30,17 +30,18 @@ MainWindow::~MainWindow()
 void MainWindow::onAddEdgeButtonClick()
 {
     int error = 0;
-
     edge_t edge = getNewEdge(*ui, error);
 
     if (error)
     {
+        qDebug() << "ОШИБКА";
         // TODO
         return;
     }
 
     addEdge(*figure, edge);
-    uiUpdate(*figure);
+    uiUpdate(*ui, *figure);
+
 }
 
 void MainWindow::onDeleteEdgeButtonCLick()

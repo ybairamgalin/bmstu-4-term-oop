@@ -11,6 +11,8 @@
 
 #include "edge.h"
 #include "errors.h"
+#include "point3d.h"
+
 
 #ifndef DOCK_WIDTH
 #define DOCK_WIDTH 300
@@ -46,6 +48,6 @@ QDockWidget *editorGetDock(editorDock_t *editorDock);
 QPushButton &getAddEdgeButton(editorDock_t &dock);
 QPushButton &getDeleteButton(editorDock_t &dock);
 
-edge_t getNewEdge(editorDock_t &dock, int &error);
+edge_t getNewEdge(editorDock_t &dock, error &error);
 
 #endif // EDITORDOCK_H

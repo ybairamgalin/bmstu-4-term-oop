@@ -13,7 +13,7 @@ struct figure
     int lng;
 };
 
-typedef struct figure figure_t
+typedef struct figure figure_t;
 
 void addEdge(figure_t &, const edge_t &edge);
 

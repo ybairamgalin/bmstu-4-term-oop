@@ -59,21 +59,21 @@ static void placeFields(editorDock_t *editorDock)
     editorDock->dock->setWidget(editorDock->multiWidget);
 }
 
-static point3d getP1(editorDock_t *editorDock, error &error)
+static point3d getP1(const editorDock_t &editorDock, error &error)
 {
     bool converted = true;
     error = OK;
-    double x = editorDock->x1Edit->text().toDouble(&converted);
+    double x = editorDock.x1Edit->text().toDouble(&converted);
 
     if (!converted)
         error = P1_FIELDS;
 
-    double y = editorDock->y1Edit->text().toDouble(&converted);
+    double y = editorDock.y1Edit->text().toDouble(&converted);
 
     if (!converted)
         error = P1_FIELDS;
 
-    double z = editorDock->y1Edit->text().toDouble(&converted);
+    double z = editorDock.z1Edit->text().toDouble(&converted);
 
     if (!converted)
         error = P1_FIELDS;
@@ -81,24 +81,24 @@ static point3d getP1(editorDock_t *editorDock, error &error)
     return point3dInit(x, y, z);
 }
 
-static point3d getP2(editorDock_t *editorDock, error &error)
+static point3d getP2(const editorDock_t &editorDock, error &error)
 {
     bool converted = true;
     error = OK;
-    double x = editorDock->x2Edit->text().toDouble(&converted);
+    double x = editorDock.x2Edit->text().toDouble(&converted);
 
     if (!converted)
-        error = P1_FIELDS;
+        error = P2_FIELDS;
 
-    double y = editorDock->y2Edit->text().toDouble(&converted);
-
-    if (!converted)
-        error = P1_FIELDS;
-
-    double z = editorDock->y2Edit->text().toDouble(&converted);
+    double y = editorDock.y2Edit->text().toDouble(&converted);
 
     if (!converted)
-        error = P1_FIELDS;
+        error = P2_FIELDS;
+
+    double z = editorDock.z2Edit->text().toDouble(&converted);
+
+    if (!converted)
+        error = P2_FIELDS;
 
     return point3dInit(x, y, z);
 }
@@ -139,7 +139,7 @@ QPushButton &getDeleteButton(editorDock &dock)
     return *(dock.deleteEdgeButton);
 }
 
-edge_t getNewEdge(editorDock_t &dock, error &error)
+edge_t getNewEdge(const editorDock_t &dock, error &error)
 {
     point3d p1 = getP1(dock, error);
 
@@ -150,4 +150,6 @@ edge_t getNewEdge(editorDock_t &dock, error &error)
 
     if (error)
         return edgeInit(point3dInit(0, 0, 0), point3dInit(0, 0, 0));
+  
+    return edgeInit(p1, p2);
 }
