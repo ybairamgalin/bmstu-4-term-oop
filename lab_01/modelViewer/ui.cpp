@@ -19,7 +19,7 @@ void uiDelete(ui_t *ui)
 
 QWidget *getRenderArea(ui_t *ui)
 {
-    return getPaintArea(ui->renderArea);
+    return getPaintWidget(ui->renderArea);
 }
 
 QDockWidget *getEditorDock(ui_t *ui)

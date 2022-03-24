@@ -1,4 +1,4 @@
-#include "editorDock.h"
+ #include "editorDock.h"
 
 static void allocateFields(editorDock_t *editorDock)
 {

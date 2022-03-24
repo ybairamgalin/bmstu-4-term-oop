@@ -12,6 +12,7 @@ SOURCES += \
     editorDock.cpp \
     main.cpp \
     mainwindow.cpp \
+    point2d.cpp \
     renderArea.cpp \
     transformationDock.cpp \
     ui.cpp
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     editorDock.h \
     mainwindow.h \
+    point2d.h \
     renderArea.h \
     transformationDock.h \
     ui.h

@@ -3,8 +3,8 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    ui = uiCreate(this);
     setMinimumSize(minWindowSize);
+    ui = uiCreate(this);
 
     addDockWidget(Qt::RightDockWidgetArea, getEditorDock(ui));
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
@@ -16,4 +16,3 @@ MainWindow::~MainWindow()
 {
     uiDelete(ui);
 }
-

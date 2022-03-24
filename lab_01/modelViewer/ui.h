@@ -15,7 +15,7 @@ struct ui
     transformationDock_t *transformationDock;
 };
 
-typedef  ui ui_t;
+typedef struct ui ui_t;
 
 ui_t *uiCreate(QMainWindow *parent = nullptr);
 void uiDelete(ui_t *ui);
