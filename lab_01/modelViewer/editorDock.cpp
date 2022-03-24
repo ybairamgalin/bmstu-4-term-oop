@@ -84,3 +84,13 @@ QDockWidget *editorGetDock(editorDock_t *editorDock)
 {
     return editorDock->dock;
 }
+
+QPushButton &getAddEdgeButton(editorDock_t &dock)
+{
+    return *(dock.addEdgeButton);
+}
+
+QPushButton &getDeleteButton(editorDock &dock)
+{
+    return *(dock.deleteEdgeButton);
+}

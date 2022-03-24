@@ -12,6 +12,8 @@
 #define DOCK_WIDTH 300
 #endif
 
+#include <QObject>
+
 struct editorDock
 {
     QDockWidget *dock;
@@ -38,5 +40,8 @@ editorDock_t *editorDockCreate(QWidget *parent);
 void editorDockDelete(editorDock_t *editorDock);
 
 QDockWidget *editorGetDock(editorDock_t *editorDock);
+
+QPushButton &getAddEdgeButton(editorDock_t &dock);
+QPushButton &getDeleteButton(editorDock_t &dock);
 
 #endif // EDITORDOCK_H

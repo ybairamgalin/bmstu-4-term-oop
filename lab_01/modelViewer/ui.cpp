@@ -31,3 +31,28 @@ QDockWidget *getTransformationDock(ui_t *ui)
 {
     return tranformationGetDock(ui->transformationDock);
 }
+
+QPushButton &getAddEdgeButton(ui_t &ui)
+{
+    return getAddEdgeButton(*(ui.editorDock));
+}
+
+QPushButton &getDeleteEdgeButton(ui_t &ui)
+{
+    return getDeleteButton(*(ui.editorDock));
+}
+
+QPushButton &getTranslateButton(ui_t &ui)
+{
+    return getTranslateButton(*(ui.transformationDock));
+}
+
+QPushButton &getScaleButton(ui_t &ui)
+{
+    return getScaleButton(*(ui.transformationDock));
+}
+
+QPushButton &getRotateButton(ui_t &ui)
+{
+    return getRotateButton(*(ui.transformationDock));
+}

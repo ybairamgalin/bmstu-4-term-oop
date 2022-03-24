@@ -44,4 +44,8 @@ void transformationDockDelete(transformationDock_t *transformationDock);
 
 QDockWidget *tranformationGetDock(transformationDock_t *transformationDock);
 
+QPushButton &getTranslateButton(transformationDock_t &dock);
+QPushButton &getScaleButton(transformationDock_t &dock);
+QPushButton &getRotateButton(transformationDock_t &dock);
+
 #endif // TRANSFORMATIONDOCK_H

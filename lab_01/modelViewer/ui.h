@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWidget>
+#include <QPushButton>
 
 #include "transformationDock.h"
 #include "editorDock.h"
@@ -23,5 +24,11 @@ void uiDelete(ui_t *ui);
 QWidget *getRenderArea(ui_t *ui);
 QDockWidget *getEditorDock(ui_t *ui);
 QDockWidget *getTransformationDock(ui_t *ui);
+
+QPushButton &getAddEdgeButton(ui_t &ui);
+QPushButton &getDeleteEdgeButton(ui_t &ui);
+QPushButton &getTranslateButton(ui_t &ui);
+QPushButton &getScaleButton(ui_t &ui);
+QPushButton &getRotateButton(ui_t &ui);
 
 #endif // UI_H

@@ -80,3 +80,18 @@ QDockWidget *tranformationGetDock(transformationDock_t *dock)
 {
     return dock->dock;
 }
+
+QPushButton &getTranslateButton(transformationDock_t &dock)
+{
+    return *(dock.translateButton);
+}
+
+QPushButton &getScaleButton(transformationDock_t &dock)
+{
+    return *(dock.scaleButton);
+}
+
+QPushButton &getRotateButton(transformationDock_t &dock)
+{
+    return *(dock.rotateButton);
+}
