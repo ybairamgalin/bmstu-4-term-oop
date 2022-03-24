@@ -1,6 +1,7 @@
 #ifndef EDITORDOCK_H
 #define EDITORDOCK_H
 
+#include <QObject>
 #include <QDockWidget>
 #include <QLabel>
 #include <QLineEdit>
@@ -8,11 +9,13 @@
 #include <QGridLayout>
 #include <QListWidget>
 
+#include "edge.h"
+#include "errors.h"
+#include "point3d.h"
+
 #ifndef DOCK_WIDTH
 #define DOCK_WIDTH 300
 #endif
-
-#include <QObject>
 
 struct editorDock
 {
@@ -43,5 +46,7 @@ QDockWidget *editorGetDock(editorDock_t *editorDock);
 
 QPushButton &getAddEdgeButton(editorDock_t &dock);
 QPushButton &getDeleteButton(editorDock_t &dock);
+
+edge_t getNewEdge(editorDock_t &dock, error &error);
 
 #endif // EDITORDOCK_H

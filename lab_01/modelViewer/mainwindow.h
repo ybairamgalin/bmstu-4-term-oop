@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 
 #include "ui.h"
+#include "figure.h"
+#include "edge.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +18,7 @@ public:
 
 private:
     ui_t *ui;
+    figure_t *figure;
 
     const QSize minWindowSize = QSize(1300, 800);
 private slots:

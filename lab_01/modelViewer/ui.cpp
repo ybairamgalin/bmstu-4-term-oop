@@ -56,3 +56,8 @@ QPushButton &getRotateButton(ui_t &ui)
 {
     return getRotateButton(*(ui.transformationDock));
 }
+
+edge_t getNewEdge(const ui_t &ui, error &error)
+{
+    return getNewEdge(*(ui.editorDock), error);
+}
