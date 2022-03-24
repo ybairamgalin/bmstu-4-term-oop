@@ -150,6 +150,6 @@ edge_t getNewEdge(const editorDock_t &dock, error &error)
 
     if (error)
         return edgeInit(point3dInit(0, 0, 0), point3dInit(0, 0, 0));
-
+  
     return edgeInit(p1, p2);
 }

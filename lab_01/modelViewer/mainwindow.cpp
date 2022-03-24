@@ -35,11 +35,13 @@ void MainWindow::onAddEdgeButtonClick()
     if (error)
     {
         qDebug() << "ОШИБКА";
+        // TODO
         return;
     }
 
     addEdge(*figure, edge);
     uiUpdate(*ui, *figure);
+
 }
 
 void MainWindow::onDeleteEdgeButtonCLick()
