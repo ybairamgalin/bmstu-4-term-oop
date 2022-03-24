@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     addDockWidget(Qt::RightDockWidgetArea, getEditorDock(ui));
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
-
     setCentralWidget(getRenderArea(ui));
 
     connect(&getAddEdgeButton(*ui), SIGNAL(released()),
@@ -21,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(onScaleButtonClick()));
     connect(&getRotateButton(*ui), SIGNAL(released()),
             this, SLOT(onRotateButtonCLick()));
-
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +29,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::onAddEdgeButtonClick()
 {
-    qDebug() << "CLICKED ADD EDGE";
+    int error = 0;
+
+    edge_t edge = getNewEdge(*ui, error);
+
+    if (error)
+    {
+        // TODO
+        return;
+    }
+
+    addEdge(*figure, edge);
+    uiUpdate(*figure);
 }
 
 void MainWindow::onDeleteEdgeButtonCLick()
