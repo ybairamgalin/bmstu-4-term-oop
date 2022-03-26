@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setMinimumSize(minWindowSize);
     ui = uiCreate(this);
+    figure = figureCreate();
 
     addDockWidget(Qt::RightDockWidgetArea, getEditorDock(ui));
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
@@ -29,10 +30,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::onAddEdgeButtonClick()
 {
-    int error = 0;
-    edge_t edge = getNewEdge(*ui, error);
+    error err = OK;
+    edge_t edge = getNewEdge(*ui, err);
 
-    if (error)
+    if (err)
     {
         qDebug() << "ОШИБКА";
         // TODO
@@ -41,24 +42,52 @@ void MainWindow::onAddEdgeButtonClick()
 
     addEdge(*figure, edge);
     uiUpdate(*ui, *figure);
-
 }
 
 void MainWindow::onDeleteEdgeButtonCLick()
 {
-    qDebug() << "CLICKED DELETE";
 }
 void MainWindow::onTranslateButtonClick()
 {
-    qDebug() << "CLICKED TRANSLATE";
+    error err = OK;
+    point3d translateData = getTranslation(*ui, err);
+
+    if (err)
+    {
+        // TODO
+        return;
+    }
+
+    translate(*figure, translateData);
+    uiUpdate(*ui, *figure);
 }
 
 void MainWindow::onScaleButtonClick()
 {
-    qDebug() << "CLICKED SCALE";
+    error err = OK;
+    point3d scaleData = getScale(*ui, err);
+
+    if (err)
+    {
+        // TODO
+        return;
+    }
+
+    scale(*figure, scaleData);
+    uiUpdate(*ui, *figure);
 }
 
 void MainWindow::onRotateButtonCLick()
 {
-    qDebug() << "CLICKED ROTATE";
+    error err = OK;
+    point3d rotationData = getRotation(*ui, err);
+
+    if (err)
+    {
+        // TODO
+        return;
+    }
+
+    rotate(*figure, rotationData);
+    uiUpdate(*ui, *figure);
 }

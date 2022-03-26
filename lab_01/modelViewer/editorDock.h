@@ -48,6 +48,6 @@ QDockWidget *editorGetDock(editorDock_t *editorDock);
 QPushButton &getAddEdgeButton(editorDock_t &dock);
 QPushButton &getDeleteButton(editorDock_t &dock);
 
-edge_t getNewEdge(editorDock_t &dock, error &error);
+edge_t getNewEdge(const editorDock_t &dock, error &error);
 
 #endif // EDITORDOCK_H

@@ -54,3 +54,67 @@ double point3dGetZ(const point3d &point)
 {
     return point.z;
 }
+
+point3d translate(point3d point, point3d delta)
+{
+    return point3d{point.x + delta.x, point.y + delta.y, point.z + delta.z};
+}
+
+point3d scale(point3d point, point3d factor, point3d center)
+{
+    point3d result;
+    result.x = point.x * factor.x;
+    result.y = point.y * factor.y;
+    result.z = point.z * factor.z;
+
+    return result;
+}
+
+static point3d rotateX(const point3d point, const double angle,
+                       const point3d center)
+{
+    double angleRad = angle * M_PI / 180.0;
+
+    point3d result;
+    result.x = point.x;
+    result.y = point.y * cos(angleRad) - point.z * sin(angleRad);
+    result.z = point.z * cos(angleRad) + point.y * sin(angleRad);
+
+    return result;
+}
+
+static point3d rotateY(const point3d point, const double angle,
+                       const point3d center)
+{
+    double angleRad = angle * M_PI / 180.0;
+
+    point3d result;
+    result.x = point.x * cos(angleRad) - point.z * sin(angleRad);
+    result.y = point.y;
+    result.z = point.z * cos(angleRad) + point.x * sin(angleRad);
+
+    return result;
+}
+
+static point3d rotateZ(const point3d point, const double angle,
+                       const point3d center)
+{
+    double angleRad = angle * M_PI / 180.0;
+
+    point3d result;
+    result.x = point.x * cos(angleRad) - point.y * sin(angleRad);
+    result.y = point.y * cos(angleRad) + point.x * sin(angleRad);
+    result.z = point.z;
+
+    return result;
+}
+
+point3d rotate(point3d point, point3d angle, point3d center)
+{
+    point3d result;
+    result = rotateX(point, angle.x, center);
+    result = rotateY(result, angle.y, center);
+    result = rotateZ(result, angle.z, center);
+
+    return result;
+}

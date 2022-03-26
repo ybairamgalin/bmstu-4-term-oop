@@ -24,3 +24,13 @@ double point2dGetY(point2d &point)
 {
     return point.y;
 }
+
+point2d mul(point2d &point, double num)
+{
+    return point2d{point.x * num, point.y * num};
+}
+
+point2d add(point2d &p1, point2d &p2)
+{
+    return point2d{p1.x + p2.x, p1.y + p2.y};
+}

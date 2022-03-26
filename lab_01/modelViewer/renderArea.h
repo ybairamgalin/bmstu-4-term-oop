@@ -5,7 +5,9 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
+#include "figure.h"
 #include "point2d.h"
+#include "point3d.h"
 
 struct renderArea
 {
@@ -24,5 +26,7 @@ renderArea_t *renderAreaCreate();
 void renderAreaDelete(renderArea &renderArea);
 
 QWidget *getPaintWidget(renderArea_t *);
+
+void renderAreaUpdate(renderArea &renderArea, const figure_t &figure);
 
 #endif // RENDERAREA_H

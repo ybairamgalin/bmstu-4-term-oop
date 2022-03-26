@@ -17,6 +17,11 @@ void uiDelete(ui_t *ui)
     transformationDockDelete(ui->transformationDock);
 }
 
+void uiUpdate(ui_t &ui, figure_t &figure)
+{
+    renderAreaUpdate(*(ui.renderArea), figure);
+}
+
 QWidget *getRenderArea(ui_t *ui)
 {
     return getPaintWidget(ui->renderArea);
@@ -60,4 +65,22 @@ QPushButton &getRotateButton(ui_t &ui)
 edge_t getNewEdge(const ui_t &ui, error &error)
 {
     return getNewEdge(*(ui.editorDock), error);
+}
+
+point3d getScale(ui_t &ui, error &error)
+{
+    // TODO
+    return point3d{1.1, 1.1, 1.1};
+}
+
+point3d getRotation(ui_t &ui, error &error)
+{
+    // TODO
+    return point3d{0, 0, 15};
+}
+
+point3d getTranslation(ui_t &ui, error &error)
+{
+    // TODO
+    return point3d{1, 1, 1};
 }

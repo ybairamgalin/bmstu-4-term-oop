@@ -2,6 +2,7 @@
 #define FIGURE_H
 
 #include "edge.h"
+#include "point3d.h"
 
 #ifndef MAX_FIGURE_EDGES
 #define MAX_FIGURE_EDGES 100
@@ -14,6 +15,13 @@ struct figure
 };
 
 typedef struct figure figure_t;
+
+figure_t *figureCreate();
+void figureDelete(figure_t &);
+
+void translate(figure_t &, point3d delta);
+void scale(figure_t &, point3d factor);
+void rotate(figure_t &, point3d angle);
 
 void addEdge(figure_t &, const edge_t &edge);
 
