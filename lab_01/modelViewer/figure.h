@@ -1,8 +1,11 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 
+#include <stdio.h>
+
 #include "edge.h"
 #include "point3d.h"
+#include "errors.h"
 
 #ifndef MAX_FIGURE_EDGES
 #define MAX_FIGURE_EDGES 100
@@ -16,7 +19,7 @@ struct figure
 
 typedef struct figure figure_t;
 
-figure_t *figureCreate();
+figure_t *figureCreate(const char *filename = nullptr);
 void figureDelete(figure_t &);
 
 void translate(figure_t &, point3d delta);

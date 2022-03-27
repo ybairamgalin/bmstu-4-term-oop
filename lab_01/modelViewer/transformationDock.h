@@ -7,6 +7,9 @@
 #include <QPushButton>
 #include <QGridLayout>
 
+#include "point3d.h"
+#include "errors.h"
+
 #ifndef DOCK_WIDTH
 #define DOCK_WIDTH 300
 #endif
@@ -47,5 +50,9 @@ QDockWidget *tranformationGetDock(transformationDock_t *transformationDock);
 QPushButton &getTranslateButton(transformationDock_t &dock);
 QPushButton &getScaleButton(transformationDock_t &dock);
 QPushButton &getRotateButton(transformationDock_t &dock);
+
+point3d getScale(transformationDock_t &dock, error &error);
+point3d getRotation(transformationDock_t &dock, error &error);
+point3d getTranslation(transformationDock_t &dock, error &error);
 
 #endif // TRANSFORMATIONDOCK_H

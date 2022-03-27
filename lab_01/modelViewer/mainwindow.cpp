@@ -4,8 +4,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setMinimumSize(minWindowSize);
+    figure = figureCreate("../../../../modelViewer/figure_1.txt");
     ui = uiCreate(this);
-    figure = figureCreate();
+    uiUpdate(*ui, *figure);
 
     addDockWidget(Qt::RightDockWidgetArea, getEditorDock(ui));
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
@@ -35,8 +36,7 @@ void MainWindow::onAddEdgeButtonClick()
 
     if (err)
     {
-        qDebug() << "ОШИБКА";
-        // TODO
+        showWarning(this, err);
         return;
     }
 
@@ -47,6 +47,7 @@ void MainWindow::onAddEdgeButtonClick()
 void MainWindow::onDeleteEdgeButtonCLick()
 {
 }
+
 void MainWindow::onTranslateButtonClick()
 {
     error err = OK;
@@ -54,7 +55,7 @@ void MainWindow::onTranslateButtonClick()
 
     if (err)
     {
-        // TODO
+        showWarning(this, err);
         return;
     }
 
@@ -69,7 +70,7 @@ void MainWindow::onScaleButtonClick()
 
     if (err)
     {
-        // TODO
+        showWarning(this, err);
         return;
     }
 
@@ -84,7 +85,7 @@ void MainWindow::onRotateButtonCLick()
 
     if (err)
     {
-        // TODO
+        showWarning(this, err);
         return;
     }
 

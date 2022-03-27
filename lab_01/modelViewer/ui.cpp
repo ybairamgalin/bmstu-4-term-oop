@@ -69,18 +69,15 @@ edge_t getNewEdge(const ui_t &ui, error &error)
 
 point3d getScale(ui_t &ui, error &error)
 {
-    // TODO
-    return point3d{1.1, 1.1, 1.1};
+    return getScale(*(ui.transformationDock), error);
 }
 
 point3d getRotation(ui_t &ui, error &error)
 {
-    // TODO
-    return point3d{0, 0, 15};
+    return getRotation(*(ui.transformationDock), error);
 }
 
 point3d getTranslation(ui_t &ui, error &error)
 {
-    // TODO
-    return point3d{1, 1, 1};
+    return getTranslation(*(ui.transformationDock), error);
 }

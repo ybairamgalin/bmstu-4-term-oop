@@ -1,5 +1,28 @@
 #include "transformationDock.h"
 
+static point3d getFields(QLineEdit *first, QLineEdit *second,
+                         QLineEdit *third, error &error)
+{
+    bool converted = true;
+    error = OK;
+    double x = first->text().toDouble(&converted);
+
+    if (!converted)
+        error = NOT_DOUBLE;
+
+    double y = second->text().toDouble(&converted);
+
+    if (!converted)
+        error = NOT_DOUBLE;
+
+    double z = third->text().toDouble(&converted);
+
+    if (!converted)
+        error = NOT_DOUBLE;
+
+    return point3d{x, y, z};
+}
+
 static void allocateFields(transformationDock_t *dock)
 {
     dock->translateLabel = new QLabel("Перенос");
@@ -94,4 +117,19 @@ QPushButton &getScaleButton(transformationDock_t &dock)
 QPushButton &getRotateButton(transformationDock_t &dock)
 {
     return *(dock.rotateButton);
+}
+
+point3d getScale(transformationDock_t &dock, error &error)
+{
+    return getFields(dock.kxEdit, dock.kyEdit, dock.kzEdit, error);
+}
+
+point3d getRotation(transformationDock_t &dock, error &error)
+{
+    return getFields(dock.rxEdit, dock.ryEdit, dock.rzEdit, error);
+}
+
+point3d getTranslation(transformationDock_t &dock, error &error)
+{
+    return getFields(dock.dxEdit, dock.dyEdit, dock.dzEdit, error);
 }
