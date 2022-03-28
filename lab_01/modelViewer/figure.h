@@ -28,4 +28,7 @@ void rotate(figure_t &, point3d angle);
 
 void addEdge(figure_t &, const edge_t &edge);
 
+int getLng(const figure_t &figure);
+edge_t getEdge(const figure_t &figure, const int index);
+
 #endif // FIGURE_H

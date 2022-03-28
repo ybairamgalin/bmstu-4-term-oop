@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
+#include "taskHandler.h"
 #include "ui.h"
 #include "figure.h"
 #include "edge.h"
@@ -16,9 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void updateView(figure_t &model);
 private:
     ui_t *ui;
-    figure_t *figure;
 
     const QSize minWindowSize = QSize(1300, 800);
 private slots:
@@ -28,4 +29,5 @@ private slots:
     void onScaleButtonClick();
     void onRotateButtonCLick();
 };
+
 #endif // MAINWINDOW_H

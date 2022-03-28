@@ -18,6 +18,7 @@ SOURCES += \
     point2d.cpp \
     point3d.cpp \
     renderArea.cpp \
+    taskHandler.cpp \
     transformationDock.cpp \
     ui.cpp
 
@@ -30,6 +31,7 @@ HEADERS += \
     point2d.h \
     point3d.h \
     renderArea.h \
+    taskHandler.h \
     transformationDock.h \
     ui.h
 

@@ -61,3 +61,14 @@ void rotate(figure_t &figure, point3d angle)
     for (int i =  0; i < figure.lng; i++)
         figure.edges[i] = rotate(figure.edges[i], angle);
 }
+
+
+int getLng(const figure_t &figure)
+{
+    return figure.lng;
+}
+
+edge_t getEdge(const figure_t &figure, const int index)
+{
+    return figure.edges[index];
+}
