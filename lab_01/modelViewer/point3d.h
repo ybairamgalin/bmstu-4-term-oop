@@ -1,6 +1,7 @@
 #ifndef POINT3D_H
 #define POINT3D_H
 
+#include <QString>
 #include <math.h>
 
 struct point3d
@@ -28,5 +29,7 @@ double point3dGetZ(const point3d &point);
 point3d translate(point3d point, point3d delta);
 point3d scale(point3d point, point3d factor, point3d center = {0, 0, 0});
 point3d rotate(point3d point, point3d angle, point3d center = {0, 0, 0});
+
+QString toQString(point3d point);
 
 #endif // POINT3D_H

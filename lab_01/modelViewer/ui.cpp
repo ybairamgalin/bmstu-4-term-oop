@@ -20,6 +20,7 @@ void uiDelete(ui_t *ui)
 void uiUpdate(ui_t &ui, figure_t &figure)
 {
     renderAreaUpdate(*(ui.renderArea), figure);
+    editorDockUpdate(*(ui.editorDock), figure);
 }
 
 QWidget *getRenderArea(ui_t *ui)

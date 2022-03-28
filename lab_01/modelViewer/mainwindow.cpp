@@ -4,9 +4,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setMinimumSize(minWindowSize);
-    figure = figureCreate("../../../../modelViewer/figure_1.txt");
     ui = uiCreate(this);
-    uiUpdate(*ui, *figure);
 
     addDockWidget(Qt::RightDockWidgetArea, getEditorDock(ui));
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
@@ -29,6 +27,11 @@ MainWindow::~MainWindow()
     uiDelete(ui);
 }
 
+void MainWindow::updateView(figure_t &model)
+{
+    uiUpdate(*ui, model);
+}
+
 void MainWindow::onAddEdgeButtonClick()
 {
     error err = OK;
@@ -40,8 +43,11 @@ void MainWindow::onAddEdgeButtonClick()
         return;
     }
 
-    addEdge(*figure, edge);
-    uiUpdate(*ui, *figure);
+    task_t task;
+    task.type = ADD_EDGE;
+    task.data.edge = edge;
+
+    handleTask(task);
 }
 
 void MainWindow::onDeleteEdgeButtonCLick()
@@ -51,7 +57,7 @@ void MainWindow::onDeleteEdgeButtonCLick()
 void MainWindow::onTranslateButtonClick()
 {
     error err = OK;
-    point3d translateData = getTranslation(*ui, err);
+    point3d point = getTranslation(*ui, err);
 
     if (err)
     {
@@ -59,14 +65,17 @@ void MainWindow::onTranslateButtonClick()
         return;
     }
 
-    translate(*figure, translateData);
-    uiUpdate(*ui, *figure);
+    task_t task;
+    task.type = TRANSLATE;
+    task.data.point = point;
+
+    handleTask(task);
 }
 
 void MainWindow::onScaleButtonClick()
 {
     error err = OK;
-    point3d scaleData = getScale(*ui, err);
+    point3d point = getScale(*ui, err);
 
     if (err)
     {
@@ -74,14 +83,17 @@ void MainWindow::onScaleButtonClick()
         return;
     }
 
-    scale(*figure, scaleData);
-    uiUpdate(*ui, *figure);
+    task_t task;
+    task.type = SCALE;
+    task.data.point = point;
+
+    handleTask(task);
 }
 
 void MainWindow::onRotateButtonCLick()
 {
     error err = OK;
-    point3d rotationData = getRotation(*ui, err);
+    point3d point = getRotation(*ui, err);
 
     if (err)
     {
@@ -89,6 +101,11 @@ void MainWindow::onRotateButtonCLick()
         return;
     }
 
-    rotate(*figure, rotationData);
-    uiUpdate(*ui, *figure);
+    task_t task;
+    task.type = ROTATE;
+    task.data.point = point;
+
+    handleTask(task);
 }
+
+

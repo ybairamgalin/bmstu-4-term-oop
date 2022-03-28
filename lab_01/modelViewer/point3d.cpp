@@ -118,3 +118,10 @@ point3d rotate(point3d point, point3d angle, point3d center)
 
     return result;
 }
+
+QString toQString(point3d point)
+{
+    return "(" + QString::number(point.x) + ", " +
+                 QString::number(point.y) + ", " +
+                 QString::number(point.z) + "" + ")";
+}

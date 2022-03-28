@@ -12,6 +12,7 @@
 #include "edge.h"
 #include "errors.h"
 #include "point3d.h"
+#include "figure.h"
 
 
 #ifndef DOCK_WIDTH
@@ -42,6 +43,7 @@ typedef struct editorDock editorDock_t;
 
 editorDock_t *editorDockCreate(QWidget *parent);
 void editorDockDelete(editorDock_t *editorDock);
+void editorDockUpdate(editorDock_t &dock, const figure_t &figure);
 
 QDockWidget *editorGetDock(editorDock_t *editorDock);
 

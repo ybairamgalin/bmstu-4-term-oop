@@ -153,3 +153,16 @@ edge_t getNewEdge(const editorDock_t &dock, error &error)
   
     return edgeInit(p1, p2);
 }
+
+void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
+{
+    dock.edgesList->clear();
+    int lng = getLng(figure);
+
+    for (int i = 0; i < lng; i++)
+    {
+        edge_t edge = getEdge(figure, i);
+
+        dock.edgesList->addItem(toQString(edge.p1) + " <-> " + toQString(edge.p2));
+    }
+}

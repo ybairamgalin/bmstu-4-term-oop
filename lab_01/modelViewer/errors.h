@@ -13,6 +13,8 @@ enum error
     NOT_DOUBLE
 };
 
+typedef enum error error_t;
+
 void showWarning(QWidget *parent, const error &error);
 
 #endif // ERRORS_H
