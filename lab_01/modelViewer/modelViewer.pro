@@ -23,6 +23,7 @@ SOURCES += \
     ui.cpp
 
 HEADERS += \
+    drawer.h \
     edge.h \
     editorDock.h \
     errors.h \

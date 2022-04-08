@@ -8,9 +8,12 @@ enum error
 {
     OK = 0,
     NO_SUCH_FILE,
+    MAX_EDGES,
     P1_FIELDS,
     P2_FIELDS,
-    NOT_DOUBLE
+    NOT_DOUBLE,
+    NO_DRAWER_SET,
+    UNKNOWN_TASK
 };
 
 typedef enum error error_t;

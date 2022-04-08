@@ -82,3 +82,8 @@ point3d getTranslation(ui_t &ui, error &error)
 {
     return getTranslation(*(ui.transformationDock), error);
 }
+
+drawer_t getDrawer(ui_t &ui)
+{
+    return getDrawer(*(ui.renderArea));
+}

@@ -78,7 +78,7 @@ static point3d getP1(const editorDock_t &editorDock, error &error)
     if (!converted)
         error = P1_FIELDS;
 
-    return point3dInit(x, y, z);
+    return point3d{x, y, z};
 }
 
 static point3d getP2(const editorDock_t &editorDock, error &error)
@@ -100,7 +100,7 @@ static point3d getP2(const editorDock_t &editorDock, error &error)
     if (!converted)
         error = P2_FIELDS;
 
-    return point3dInit(x, y, z);
+    return point3d{x, y, z};
 }
 
 editorDock_t *editorDockCreate(QWidget *parent)
@@ -144,14 +144,14 @@ edge_t getNewEdge(const editorDock_t &dock, error &error)
     point3d p1 = getP1(dock, error);
 
     if (error)
-        return edgeInit(point3dInit(0, 0, 0), point3dInit(0, 0, 0));
+        return edge_t{point3d{0, 0, 0}, point3d{0, 0, 0}};
 
     point3d p2 = getP2(dock, error);
 
     if (error)
-        return edgeInit(point3dInit(0, 0, 0), point3dInit(0, 0, 0));
+        return edge{point3d{0, 0, 0}, point3d{0, 0, 0}};
   
-    return edgeInit(p1, p2);
+    return edge_t{p1, p2};
 }
 
 void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
@@ -162,7 +162,9 @@ void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
     for (int i = 0; i < lng; i++)
     {
         edge_t edge = getEdge(figure, i);
+        QString line = QString::fromStdString(toString(edge.p1) +
+                       " <-> " + toString(edge.p2));
 
-        dock.edgesList->addItem(toQString(edge.p1) + " <-> " + toQString(edge.p2));
+        dock.edgesList->addItem(line);
     }
 }

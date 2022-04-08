@@ -3,6 +3,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    task_t task;
+    task.type = START_UP;
+    handleTask(task);
+
     setMinimumSize(minWindowSize);
     ui = uiCreate(this);
 
@@ -10,10 +14,18 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::RightDockWidgetArea, getTransformationDock(ui));
     setCentralWidget(getRenderArea(ui));
 
+    connectButtons();
+}
+
+MainWindow::~MainWindow()
+{
+    uiDelete(ui);
+}
+
+void MainWindow::connectButtons()
+{
     connect(&getAddEdgeButton(*ui), SIGNAL(released()),
             this, SLOT(onAddEdgeButtonClick()));
-    connect(&getDeleteEdgeButton(*ui), SIGNAL(released()),
-            this, SLOT(onDeleteEdgeButtonCLick()));
     connect(&getTranslateButton(*ui), SIGNAL(released()),
             this, SLOT(onTranslateButtonClick()));
     connect(&getScaleButton(*ui), SIGNAL(released()),
@@ -22,14 +34,22 @@ MainWindow::MainWindow(QWidget *parent)
             this, SLOT(onRotateButtonCLick()));
 }
 
-MainWindow::~MainWindow()
+error_t MainWindow::updateView(taskType_t type, data_t &data)
 {
-    uiDelete(ui);
-}
+    task_t task;
+    task.type = type;
+    task.data = data;
 
-void MainWindow::updateView(figure_t &model)
-{
-    uiUpdate(*ui, model);
+    error_t err = handleTask(task);
+
+    if (err)
+        return err;
+
+    task.type = DRAW;
+    task.data.drawer = getDrawer(*ui);
+    err = handleTask(task);
+
+    return err;
 }
 
 void MainWindow::onAddEdgeButtonClick()
@@ -43,15 +63,12 @@ void MainWindow::onAddEdgeButtonClick()
         return;
     }
 
-    task_t task;
-    task.type = ADD_EDGE;
-    task.data.edge = edge;
+    data_t data;
+    data.edge = edge;
+    err = updateView(ADD_EDGE, data);
 
-    handleTask(task);
-}
-
-void MainWindow::onDeleteEdgeButtonCLick()
-{
+    if (err)
+        showWarning(this, err);
 }
 
 void MainWindow::onTranslateButtonClick()
@@ -65,11 +82,12 @@ void MainWindow::onTranslateButtonClick()
         return;
     }
 
-    task_t task;
-    task.type = TRANSLATE;
-    task.data.point = point;
+    data_t data;
+    data.point = point;
+    err = updateView(TRANSLATE, data);
 
-    handleTask(task);
+    if (err)
+        showWarning(this, err);
 }
 
 void MainWindow::onScaleButtonClick()
@@ -83,11 +101,12 @@ void MainWindow::onScaleButtonClick()
         return;
     }
 
-    task_t task;
-    task.type = SCALE;
-    task.data.point = point;
+    data_t data;
+    data.point = point;
+    err = updateView(SCALE, data);
 
-    handleTask(task);
+    if (err)
+        showWarning(this, err);
 }
 
 void MainWindow::onRotateButtonCLick()
@@ -101,11 +120,10 @@ void MainWindow::onRotateButtonCLick()
         return;
     }
 
-    task_t task;
-    task.type = ROTATE;
-    task.data.point = point;
+    data_t data;
+    data.point = point;
+    err = updateView(ROTATE, data);
 
-    handleTask(task);
+    if (err)
+        showWarning(this, err);
 }
-
-

@@ -18,5 +18,7 @@ void showWarning(QWidget *parent, const error &error)
     case NOT_DOUBLE:
         QMessageBox::warning(parent, "Warning", "Проверьте поля");
         break;
+    default:
+        QMessageBox::warning(parent, "Warning", "Неизвестная ошибка");
     }
 }

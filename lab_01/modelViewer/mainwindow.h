@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QCloseEvent>
 
 #include "taskHandler.h"
 #include "ui.h"
@@ -17,14 +18,15 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void updateView(figure_t &model);
 private:
     ui_t *ui;
 
     const QSize minWindowSize = QSize(1300, 800);
+    void connectButtons();
+    error_t updateView(taskType_t type, data_t &data);
+
 private slots:
     void onAddEdgeButtonClick();
-    void onDeleteEdgeButtonCLick();
     void onTranslateButtonClick();
     void onScaleButtonClick();
     void onRotateButtonCLick();

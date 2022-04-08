@@ -1,5 +1,21 @@
 #include "renderArea.h"
 
+const static int centerX = 0;
+const static int centerY = 0;
+const static int vectorXdx = 100;
+const static int vectorXdy = 0;
+const static int vectorYdx = -70;
+const static int vectorYdy = -70;
+const static int vectorZdx = 0;
+const static int vectorZdy = 100;
+
+static void drawLine(renderArea &renderArea,
+                     point2d p1, point2d p2)
+{
+    renderArea.scene->addLine(point2dGetX(p1), point2dGetY(p1),
+                              point2dGetX(p2), point2dGetY(p2));
+}
+
 static void drawBg(renderArea &renderArea)
 {
     renderArea.scene->addLine(point2dGetX(*(renderArea.center)),
@@ -33,9 +49,16 @@ static point2d to2d(renderArea &renderArea, point3d point)
     return result;
 }
 
-static void drawFigure(renderArea &renderArea, figure_t &figure)
+static void drawFigure(renderArea &renderArea, const figure_t &figure)
 {
+    for (int i = 0; i < figure.lng; i++)
+    {
+        point2d p1 = to2d(renderArea, figure.edges[i].p1);
+        point2d p2 = to2d(renderArea, figure.edges[i].p2);
 
+        renderArea.scene->addLine(point2dGetX(p1), point2dGetY(p1),
+                                  point2dGetX(p2), point2dGetY(p2));
+    }
 }
 
 renderArea_t *renderAreaCreate()
@@ -45,11 +68,10 @@ renderArea_t *renderAreaCreate()
     renderArea->paintWidget = new QGraphicsView;
     renderArea->scene = new QGraphicsScene;
 
-    // TODO ADD CONSTS
-    renderArea->center = point2dCreate(0, 0);
-    renderArea->vectorX = point2dCreate(100, 0);
-    renderArea->vectorY = point2dCreate(-70, -70);
-    renderArea->vectorZ = point2dCreate(0, 100);
+    renderArea->center = point2dCreate(centerX, centerY);
+    renderArea->vectorX = point2dCreate(vectorXdx, vectorXdy);
+    renderArea->vectorY = point2dCreate(vectorYdx, vectorYdy);
+    renderArea->vectorZ = point2dCreate(vectorZdx, vectorZdy);
 
     renderArea->scene->setSceneRect(QRectF(0, 0, 1, 1));
     drawBg(*renderArea);
@@ -62,7 +84,13 @@ renderArea_t *renderAreaCreate()
 
 void renderAreaDelete(renderArea &renderArea)
 {
-    // TODO
+    point2dDelete(*renderArea.center);
+    point2dDelete(*renderArea.vectorX);
+    point2dDelete(*renderArea.vectorY);
+    point2dDelete(*renderArea.vectorZ);
+    delete renderArea.scene;
+    delete renderArea.scene;
+    delete &renderArea;
 }
 
 QWidget *getPaintWidget(renderArea_t *renderArea)
@@ -74,13 +102,10 @@ void renderAreaUpdate(renderArea &renderArea, const figure_t &figure)
 {
     renderArea.scene->clear();
     drawBg(renderArea);
+    drawFigure(renderArea, figure);
+}
 
-    for (int i = 0; i < figure.lng; i++)
-    {
-        point2d p1 = to2d(renderArea, figure.edges[i].p1);
-        point2d p2 = to2d(renderArea, figure.edges[i].p2);
-
-        renderArea.scene->addLine(point2dGetX(p1), point2dGetY(p1),
-                                  point2dGetX(p2), point2dGetY(p2));
-    }
+drawer_t getDrawer(renderArea &renderArea)
+{
+    return drawer_t{&renderArea, drawLine};
 }

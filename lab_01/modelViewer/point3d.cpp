@@ -1,12 +1,8 @@
 #include "point3d.h"
 
-point3d point3dInit(const double x, const double y,
-                    const double z)
-{
-    point3d point = {x, y, z};
-
-    return point;
-}
+#ifndef TO_RAD
+#define TO_RAD(degrees) (degrees) * M_PI / 180.0
+#endif
 
 point3d *point3dCreate(const double x, const double y,
                        const double z)
@@ -62,18 +58,21 @@ point3d translate(point3d point, point3d delta)
 
 point3d scale(point3d point, point3d factor, point3d center)
 {
+    point3d translated = translate(point, neg(center));
     point3d result;
-    result.x = point.x * factor.x;
-    result.y = point.y * factor.y;
-    result.z = point.z * factor.z;
+
+    result.x = translated.x * factor.x;
+    result.y = translated.y * factor.y;
+    result.z = translated.z * factor.z;
+
+    result = translate(result, center);
 
     return result;
 }
 
-static point3d rotateX(const point3d point, const double angle,
-                       const point3d center)
+static point3d rotateX(const point3d point, const double angle)
 {
-    double angleRad = angle * M_PI / 180.0;
+    double angleRad = TO_RAD(angle);
 
     point3d result;
     result.x = point.x;
@@ -83,10 +82,9 @@ static point3d rotateX(const point3d point, const double angle,
     return result;
 }
 
-static point3d rotateY(const point3d point, const double angle,
-                       const point3d center)
+static point3d rotateY(const point3d point, const double angle)
 {
-    double angleRad = angle * M_PI / 180.0;
+    double angleRad = TO_RAD(angle);
 
     point3d result;
     result.x = point.x * cos(angleRad) - point.z * sin(angleRad);
@@ -96,10 +94,9 @@ static point3d rotateY(const point3d point, const double angle,
     return result;
 }
 
-static point3d rotateZ(const point3d point, const double angle,
-                       const point3d center)
+static point3d rotateZ(const point3d point, const double angle)
 {
-    double angleRad = angle * M_PI / 180.0;
+    double angleRad = TO_RAD(angle);
 
     point3d result;
     result.x = point.x * cos(angleRad) - point.y * sin(angleRad);
@@ -111,17 +108,25 @@ static point3d rotateZ(const point3d point, const double angle,
 
 point3d rotate(point3d point, point3d angle, point3d center)
 {
-    point3d result;
-    result = rotateX(point, angle.x, center);
-    result = rotateY(result, angle.y, center);
-    result = rotateZ(result, angle.z, center);
+    point3d result = translate(point, neg(center));
+
+    result = rotateX(result, angle.x);
+    result = rotateY(result, angle.y);
+    result = rotateZ(result, angle.z);
+
+    result = translate(result, center);
 
     return result;
 }
 
-QString toQString(point3d point)
+std::string toString(point3d point)
 {
-    return "(" + QString::number(point.x) + ", " +
-                 QString::number(point.y) + ", " +
-                 QString::number(point.z) + "" + ")";
+    return "(" + std::to_string(point.x).substr(0, 5) + ", " +
+                 std::to_string(point.y).substr(0, 5) + ", " +
+                 std::to_string(point.z).substr(0, 5) + ")";
+}
+
+point3d neg(const point3d point)
+{
+    return point3d{-point.x, -point.y, -point.z};
 }

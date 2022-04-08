@@ -29,4 +29,6 @@ QWidget *getPaintWidget(renderArea_t *);
 
 void renderAreaUpdate(renderArea &renderArea, const figure_t &figure);
 
+drawer_t getDrawer(renderArea &renderArea);
+
 #endif // RENDERAREA_H

@@ -12,6 +12,7 @@
 #include "edge.h"
 #include "figure.h"
 #include "point3d.h"
+#include "drawer.h"
 
 struct ui
 {
@@ -40,5 +41,7 @@ QPushButton &getDeleteEdgeButton(ui_t &ui);
 QPushButton &getTranslateButton(ui_t &ui);
 QPushButton &getScaleButton(ui_t &ui);
 QPushButton &getRotateButton(ui_t &ui);
+
+drawer_t getDrawer(ui_t &ui);
 
 #endif // UI_H

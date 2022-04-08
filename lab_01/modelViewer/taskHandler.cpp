@@ -1,32 +1,40 @@
 #include "taskHandler.h"
+#include "figure.h"
+#include "init.h"
 
-static figure_t *model = nullptr;
-static MainWindow *view = nullptr;
-
-void handleTask(task_t task)
+error_t handleTask(const task_t task)
 {
+    static figure_t model = figureInit();
+
     data_t data = task.data;
+    error_t err = OK;
 
     switch (task.type)
     {
     case START_UP:
-        model = figureCreate(data.filename);
-        view = new MainWindow;
-        view->show();
+        err = readFigureFromFile(model, data.filename);
         break;
     case ADD_EDGE:
-        addEdge(*model, data.edge);
+        err = addEdge(model, data.edge);
         break;
     case TRANSLATE:
-        translate(*model, data.point);
+        err = translate(model, data.point);
         break;
     case SCALE:
-        scale(*model, data.point);
+        err = scale(model, data.point);
         break;
     case ROTATE:
-        rotate(*model, data.point);
+        err = rotate(model, data.point);
         break;
+    case DRAW:
+        err = draw(model, data.drawer);
+        break;
+    case DESTROY:
+        err = figureDelete(model);
+        break;
+    default:
+        err = UNKNOWN_TASK;
     }
 
-    view->updateView(*model);
+    return err;
 }

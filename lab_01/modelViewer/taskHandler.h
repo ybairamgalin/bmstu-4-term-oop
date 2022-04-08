@@ -5,7 +5,7 @@
 #include "point3d.h"
 #include "errors.h"
 #include "figure.h"
-#include "mainwindow.h"
+#include "drawer.h"
 
 enum taskType
 {
@@ -13,14 +13,19 @@ enum taskType
     ADD_EDGE,
     TRANSLATE,
     SCALE,
-    ROTATE
+    ROTATE,
+    DESTROY,
+    DRAW
 };
+
+typedef enum taskType taskType_t;
 
 union data
 {
     const char *filename;
     edge_t edge;
     point3d point;
+    drawer_t drawer;
 };
 
 typedef union data data_t;
@@ -33,6 +38,6 @@ struct task
 
 typedef struct task task_t;
 
-void handleTask(task_t task);
+error_t handleTask(const task_t task);
 
 #endif // TASKHANDLER_H

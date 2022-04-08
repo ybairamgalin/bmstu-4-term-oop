@@ -2,6 +2,7 @@
 #define POINT3D_H
 
 #include <QString>
+#include <string.h>
 #include <math.h>
 
 struct point3d
@@ -11,8 +12,6 @@ struct point3d
     double z;
 };
 
-point3d point3dInit(const double x, const double y,
-                const double z);
 point3d *point3dCreate(const double x, const double y,
                        const double z);
 void point3dDelete(point3d &point);
@@ -30,6 +29,8 @@ point3d translate(point3d point, point3d delta);
 point3d scale(point3d point, point3d factor, point3d center = {0, 0, 0});
 point3d rotate(point3d point, point3d angle, point3d center = {0, 0, 0});
 
-QString toQString(point3d point);
+point3d neg(const point3d point);
+
+std::string toString(point3d point);
 
 #endif // POINT3D_H

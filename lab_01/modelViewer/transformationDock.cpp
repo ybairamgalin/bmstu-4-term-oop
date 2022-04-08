@@ -96,7 +96,7 @@ transformationDock_t *transformationDockCreate(QWidget *parent)
 
 void transformationDockDelete(transformationDock_t *dock)
 {
-    // TODO!
+    delete dock;
 }
 
 QDockWidget *tranformationGetDock(transformationDock_t *dock)
