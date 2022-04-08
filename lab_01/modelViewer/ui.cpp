@@ -87,3 +87,8 @@ drawer_t getDrawer(ui_t &ui)
 {
     return getDrawer(*(ui.renderArea));
 }
+
+edgeDisplayer_t getDisplayer(ui_t &ui)
+{
+    return getDisplayer(*(ui.editorDock));
+}

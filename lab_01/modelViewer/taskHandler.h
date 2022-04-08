@@ -6,6 +6,7 @@
 #include "errors.h"
 #include "figure.h"
 #include "drawer.h"
+#include "edgeDisplayer.h"
 
 enum taskType
 {
@@ -14,6 +15,7 @@ enum taskType
     TRANSLATE,
     SCALE,
     ROTATE,
+    DISPLAY_EDGES,
     DESTROY,
     DRAW
 };
@@ -26,6 +28,7 @@ union data
     edge_t edge;
     point3d point;
     drawer_t drawer;
+    edgeDisplayer_t displayer;
 };
 
 typedef union data data_t;

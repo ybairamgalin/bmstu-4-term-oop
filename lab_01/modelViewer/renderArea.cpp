@@ -16,6 +16,11 @@ static void drawLine(renderArea &renderArea,
                               point2dGetX(p2), point2dGetY(p2));
 }
 
+static void clearAll(renderArea &renderArea)
+{
+    renderArea.scene->clear();
+}
+
 static void drawBg(renderArea &renderArea)
 {
     renderArea.scene->addLine(point2dGetX(*(renderArea.center)),
@@ -74,7 +79,7 @@ renderArea_t *renderAreaCreate()
     renderArea->vectorZ = point2dCreate(vectorZdx, vectorZdy);
 
     renderArea->scene->setSceneRect(QRectF(0, 0, 1, 1));
-    drawBg(*renderArea);
+//    drawBg(*renderArea);
 
     renderArea->paintWidget->setScene(renderArea->scene);
     renderArea->paintWidget->scale(1, -1);
@@ -107,5 +112,5 @@ void renderAreaUpdate(renderArea &renderArea, const figure_t &figure)
 
 drawer_t getDrawer(renderArea &renderArea)
 {
-    return drawer_t{&renderArea, drawLine};
+    return drawer_t{&renderArea, drawLine, clearAll};
 }

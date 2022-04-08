@@ -26,6 +26,9 @@ error_t handleTask(const task_t task)
     case ROTATE:
         err = rotate(model, data.point);
         break;
+    case DISPLAY_EDGES:
+        err = displayEdges(model, data.displayer);
+        break;
     case DRAW:
         err = draw(model, data.drawer);
         break;

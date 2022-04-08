@@ -43,5 +43,6 @@ QPushButton &getScaleButton(ui_t &ui);
 QPushButton &getRotateButton(ui_t &ui);
 
 drawer_t getDrawer(ui_t &ui);
+edgeDisplayer_t getDisplayer(ui_t &ui);
 
 #endif // UI_H

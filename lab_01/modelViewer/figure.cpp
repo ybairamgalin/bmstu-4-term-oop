@@ -54,6 +54,16 @@ static error_t drawEdge(basis_t &basis, edge_t edge, drawer_t &drawer)
     return OK;
 }
 
+static error_t clearAll(drawer_t drawer)
+{
+    if (!drawer.cleaner)
+        return NO_CLEANER_SET;
+
+    drawer.cleaner(*drawer.canvas);
+
+    return OK;
+}
+
 static basis_t basisInit()
 {
     basis_t basis;
@@ -133,9 +143,37 @@ edge_t getEdge(const figure_t &figure, const int index)
 error_t draw(figure_t &figure, drawer_t &drawer)
 {
     error_t err = OK;
+    err = clearAll(drawer);
+
+    if (err)
+        return err;
 
     for (int i = 0; i < figure.lng && !err; i++)
         err = drawEdge(figure.basis, figure.edges[i], drawer);
+
+    return OK;
+}
+
+static error_t clearDisplay(edgeDisplayer_t &displayer)
+{
+    if (!displayer.cleaner)
+        return NO_DISP_CLEANER_SET;
+
+    displayer.cleaner(*(displayer.display));
+
+    return OK;
+}
+
+error_t displayEdges(figure_t &figure, edgeDisplayer_t &displayer)
+{
+    error_t err = OK;
+    err = clearDisplay(displayer);
+
+    if (err)
+        return err;
+
+    for (int i = 0; i < figure.lng; i++)
+        displayer.adder(*(displayer.display), figure.edges[i]);
 
     return OK;
 }

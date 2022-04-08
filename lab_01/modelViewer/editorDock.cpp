@@ -154,6 +154,24 @@ edge_t getNewEdge(const editorDock_t &dock, error &error)
     return edge_t{p1, p2};
 }
 
+static void clearEdgesList(editorDock_t &dock)
+{
+    dock.edgesList->clear();
+}
+
+static void addEdge(editorDock_t &dock, edge_t edge)
+{
+    QString line = QString::fromStdString(toString(edge.p1) +
+                   " <-> " + toString(edge.p2));
+
+    dock.edgesList->addItem(line);
+}
+
+edgeDisplayer_t getDisplayer(editorDock_t &dock)
+{
+    return edgeDisplayer_t{&dock, clearEdgesList, addEdge};
+}
+
 void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
 {
     dock.edgesList->clear();

@@ -25,6 +25,7 @@ SOURCES += \
 HEADERS += \
     drawer.h \
     edge.h \
+    edgeDisplayer.h \
     editorDock.h \
     errors.h \
     figure.h \

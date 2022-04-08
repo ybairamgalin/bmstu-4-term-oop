@@ -49,6 +49,13 @@ error_t MainWindow::updateView(taskType_t type, data_t &data)
     task.data.drawer = getDrawer(*ui);
     err = handleTask(task);
 
+    if (err)
+        return err;
+
+    task.type = DISPLAY_EDGES;
+    task.data.displayer = getDisplayer(*ui);
+    err = handleTask(task);
+
     return err;
 }
 

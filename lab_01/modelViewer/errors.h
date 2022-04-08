@@ -13,6 +13,9 @@ enum error
     P2_FIELDS,
     NOT_DOUBLE,
     NO_DRAWER_SET,
+    NO_CLEANER_SET,
+    NO_DISP_CLEANER_SET,
+    NO_DISP_ADDER_SET,
     UNKNOWN_TASK
 };
 

@@ -13,6 +13,7 @@
 #include "errors.h"
 #include "point3d.h"
 #include "figure.h"
+#include "edgeDisplayer.h"
 
 
 #ifndef DOCK_WIDTH
@@ -51,5 +52,7 @@ QPushButton &getAddEdgeButton(editorDock_t &dock);
 QPushButton &getDeleteButton(editorDock_t &dock);
 
 edge_t getNewEdge(const editorDock_t &dock, error &error);
+
+edgeDisplayer_t getDisplayer(editorDock_t &dock);
 
 #endif // EDITORDOCK_H

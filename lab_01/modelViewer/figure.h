@@ -8,6 +8,7 @@
 #include "point2d.h"
 #include "errors.h"
 #include "drawer.h"
+#include "edgeDisplayer.h"
 
 #ifndef MAX_FIGURE_EDGES
 #define MAX_FIGURE_EDGES 1000
@@ -42,6 +43,8 @@ error_t rotate(figure_t &, point3d angle);
 
 error_t addEdge(figure_t &, const edge_t &edge);
 error_t draw(figure_t &, drawer_t &drawer);
+
+error_t displayEdges(figure_t &, edgeDisplayer_t &displayer);
 
 int getLng(const figure_t &figure);
 edge_t getEdge(const figure_t &figure, const int index);
