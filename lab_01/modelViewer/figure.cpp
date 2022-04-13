@@ -76,18 +76,20 @@ error_t addEdge(figure_t &figure, const edge &edge)
 
     error_t err = OK;
     size_t firstIndex = index(figure.points, p1(edge), err);
+
+    if (err)
+        return err;
+
     size_t secondIndex = index(figure.points, p2(edge), err);
+
+    if (err)
+        return err;
 
     if (firstIndex == secondIndex)
         return NOT_EDGE;
 
     addConnection(figure.connections,
                   connection{firstIndex, secondIndex});
-
-//    if (figure.lng >= MAX_FIGURE_EDGES)
-//        return MAX_EDGES;
-
-//    figure.edges[figure.lng++] = edge;
 
     return OK;
 }
@@ -112,16 +114,6 @@ error_t rotate(figure_t &figure, point3d angle)
 
     return OK;
 }
-
-//int getLng(const figure_t &figure)
-//{
-//    return figure.lng;
-//}
-
-//edge_t getEdge(const figure_t &figure, const int index)
-//{
-//    return figure.edges[index];
-//}
 
 error_t draw(figure_t &figure, drawer_t &drawer)
 {

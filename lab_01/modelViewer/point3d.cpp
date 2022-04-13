@@ -131,9 +131,9 @@ point3d neg(const point3d point)
     return point3d{-point.x, -point.y, -point.z};
 }
 
-bool equal(point3d first, point3d second)
+bool equal(point3d first, point3d second, double eps)
 {
-    return first.x == second.x &&
-           first.y == second.y &&
-           first.z == second.z;
+    return std::abs(first.x - second.x) < eps &&
+           std::abs(first.y - second.y) < eps &&
+           std::abs(first.z - second.z) < eps;
 }

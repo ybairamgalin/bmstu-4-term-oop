@@ -12,11 +12,6 @@
 #include "points.h"
 #include "connections.h"
 
-
-//#ifndef MAX_FIGURE_EDGES
-//#define MAX_FIGURE_EDGES 1000
-//#endif
-
 struct basis
 {
     point2d vectorX;
@@ -30,9 +25,6 @@ struct figure
 {
     points_t points;
     connections_t connections;
-
-//    edge_t edges[MAX_FIGURE_EDGES];
-//    int lng;
     basis_t basis;
 };
 
