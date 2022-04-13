@@ -24,6 +24,7 @@ private:
     const QSize minWindowSize = QSize(1300, 800);
     void connectButtons();
     error_t updateView(taskType_t type, data_t &data);
+    static void mbWarning(const std::string str);
 
 private slots:
     void onAddEdgeButtonClick();

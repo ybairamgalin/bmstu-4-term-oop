@@ -1,12 +1,11 @@
 #include "mainwindow.h"
 
+// to use mbWarning as callback function
+static MainWindow *windowInstance;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-//    task_t task;
-//    task.type = START_UP;
-//    handleTask(task);
-
     setMinimumSize(minWindowSize);
     ui = uiCreate(this);
 
@@ -15,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(getRenderArea(ui));
 
     connectButtons();
+    windowInstance = this;
 }
 
 MainWindow::~MainWindow()
@@ -66,7 +66,7 @@ void MainWindow::onAddEdgeButtonClick()
 
     if (err)
     {
-        showWarning(this, err);
+        showWarning(mbWarning, err);
         return;
     }
 
@@ -75,7 +75,7 @@ void MainWindow::onAddEdgeButtonClick()
     err = updateView(ADD_EDGE, data);
 
     if (err)
-        showWarning(this, err);
+        showWarning(mbWarning, err);
 }
 
 void MainWindow::onTranslateButtonClick()
@@ -85,7 +85,7 @@ void MainWindow::onTranslateButtonClick()
 
     if (err)
     {
-        showWarning(this, err);
+        showWarning(mbWarning, err);
         return;
     }
 
@@ -94,7 +94,7 @@ void MainWindow::onTranslateButtonClick()
     err = updateView(TRANSLATE, data);
 
     if (err)
-        showWarning(this, err);
+        showWarning(mbWarning, err);
 }
 
 void MainWindow::onScaleButtonClick()
@@ -104,7 +104,7 @@ void MainWindow::onScaleButtonClick()
 
     if (err)
     {
-        showWarning(this, err);
+        showWarning(mbWarning, err);
         return;
     }
 
@@ -113,7 +113,7 @@ void MainWindow::onScaleButtonClick()
     err = updateView(SCALE, data);
 
     if (err)
-        showWarning(this, err);
+        showWarning(mbWarning, err);
 }
 
 void MainWindow::onRotateButtonCLick()
@@ -123,7 +123,7 @@ void MainWindow::onRotateButtonCLick()
 
     if (err)
     {
-        showWarning(this, err);
+        showWarning(mbWarning, err);
         return;
     }
 
@@ -132,5 +132,11 @@ void MainWindow::onRotateButtonCLick()
     err = updateView(ROTATE, data);
 
     if (err)
-        showWarning(this, err);
+        showWarning(mbWarning, err);
+}
+
+void MainWindow::mbWarning(const std::string str)
+{
+    QMessageBox::warning(windowInstance, "Warning",
+                         QString::fromStdString(str));
 }

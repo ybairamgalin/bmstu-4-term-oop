@@ -1,8 +1,7 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
-#include <QMessageBox>
-#include <QWidget>
+#include <string>
 
 enum error
 {
@@ -23,6 +22,8 @@ enum error
 
 typedef enum error error_t;
 
-void showWarning(QWidget *parent, const error &error);
+typedef void (*notifier)(const std::string message);
+
+void showWarning(notifier notify, const error &error);
 
 #endif // ERRORS_H
