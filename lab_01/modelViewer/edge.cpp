@@ -27,3 +27,13 @@ point3d p2(edge_t edge)
 {
     return edge.p2;
 }
+
+const char *toCString(edge_t edge)
+{
+    static char buf[64];
+    snprintf(buf, sizeof(buf), "%lf %lf %lf %lf %lf %lf",
+             point3dGetX(edge.p1), point3dGetY(edge.p1), point3dGetZ(edge.p1),
+             point3dGetX(edge.p2), point3dGetY(edge.p2), point3dGetZ(edge.p2));
+
+    return buf;
+}

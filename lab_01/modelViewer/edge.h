@@ -18,4 +18,6 @@ edge_t rotate(edge_t edge, point3d angle, point3d center = {0.0, 0.0, 0.0});
 point3d p1(edge_t edge);
 point3d p2(edge_t edge);
 
+const char *toCString(edge_t edge);
+
 #endif // EDGE_H

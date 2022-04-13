@@ -34,26 +34,22 @@ void MainWindow::connectButtons()
             this, SLOT(onRotateButtonCLick()));
 }
 
-error_t MainWindow::updateView(taskType_t type, data_t &data)
+error_t MainWindow::updateView(task_t task)
 {
-    task_t task;
-    task.type = type;
-    task.data = data;
-
     error_t err = handleTask(task);
 
     if (err)
         return err;
 
     task.type = DRAW;
-    task.data.drawer = getDrawer(*ui);
+    task.drawer = getDrawer(*ui);
     err = handleTask(task);
 
     if (err)
         return err;
 
     task.type = DISPLAY_EDGES;
-    task.data.displayer = getDisplayer(*ui);
+    task.displayer = getDisplayer(*ui);
     err = handleTask(task);
 
     return err;
@@ -70,9 +66,10 @@ void MainWindow::onAddEdgeButtonClick()
         return;
     }
 
-    data_t data;
-    data.edge = edge;
-    err = updateView(ADD_EDGE, data);
+    task_t task;
+    task.type = ADD_EDGE;
+    task.edge = edge;
+    err = updateView(task);
 
     if (err)
         showWarning(mbWarning, err);
@@ -89,9 +86,10 @@ void MainWindow::onTranslateButtonClick()
         return;
     }
 
-    data_t data;
-    data.point = point;
-    err = updateView(TRANSLATE, data);
+    task_t task;
+    task.type = TRANSLATE;
+    task.point = point;
+    err = updateView(task);
 
     if (err)
         showWarning(mbWarning, err);
@@ -108,9 +106,10 @@ void MainWindow::onScaleButtonClick()
         return;
     }
 
-    data_t data;
-    data.point = point;
-    err = updateView(SCALE, data);
+    task_t task;
+    task.type = SCALE;
+    task.point = point;
+    err = updateView(task);
 
     if (err)
         showWarning(mbWarning, err);
@@ -127,9 +126,10 @@ void MainWindow::onRotateButtonCLick()
         return;
     }
 
-    data_t data;
-    data.point = point;
-    err = updateView(ROTATE, data);
+    task_t task;
+    task.type = ROTATE;
+    task.point = point;
+    err = updateView(task);
 
     if (err)
         showWarning(mbWarning, err);

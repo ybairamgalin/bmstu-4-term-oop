@@ -10,7 +10,8 @@
 
 enum taskType
 {
-    START_UP,
+    READ_FROM_FILE,
+    SAVE_TO_FILE,
     ADD_EDGE,
     TRANSLATE,
     SCALE,
@@ -22,21 +23,17 @@ enum taskType
 
 typedef enum taskType taskType_t;
 
-union data
-{
-    const char *filename;
-    edge_t edge;
-    point3d point;
-    drawer_t drawer;
-    edgeDisplayer_t displayer;
-};
-
-typedef union data data_t;
-
 struct task
 {
     taskType type;
-    data data;
+    union
+    {
+        const char *filename;
+        edge_t edge;
+        point3d point;
+        drawer_t drawer;
+        edgeDisplayer_t displayer;
+    };
 };
 
 typedef struct task task_t;

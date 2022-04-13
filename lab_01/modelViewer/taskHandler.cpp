@@ -1,31 +1,36 @@
 #include "taskHandler.h"
 
-error_t handleTask(const task_t task)
+error_t handleTask(task_t task)
 {
     static figure_t model = figureInit();
 
-    data_t data = task.data;
     error_t err = OK;
 
     switch (task.type)
     {
+    case READ_FROM_FILE:
+        err = readFigureFromFile(model, task.filename);
+        break;
+    case SAVE_TO_FILE:
+        err = saveFigureToFile(model, task.filename);
+        break;
     case ADD_EDGE:
-        err = addEdge(model, data.edge);
+        err = addEdge(model, task.edge);
         break;
     case TRANSLATE:
-        err = translate(model, data.point);
+        err = translate(model, task.point);
         break;
     case SCALE:
-        err = scale(model, data.point);
+        err = scale(model, task.point);
         break;
     case ROTATE:
-        err = rotate(model, data.point);
+        err = rotate(model, task.point);
         break;
     case DISPLAY_EDGES:
-        err = displayEdges(model, data.displayer);
+        err = displayEdges(model, task.displayer);
         break;
     case DRAW:
-        err = draw(model, data.drawer);
+        err = draw(model, task.drawer);
         break;
     case DESTROY:
         err = figureDelete(model);

@@ -34,6 +34,7 @@ figure_t &figureInit();
 error_t figureDelete(figure_t &);
 
 error_t readFigureFromFile(figure_t &figure, const char *filename);
+error_t saveFigureToFile(figure &figure, const char *filename);
 
 error_t translate(figure_t &, point3d delta);
 error_t scale(figure_t &, point3d factor);
@@ -43,8 +44,5 @@ error_t addEdge(figure_t &, const edge_t &edge);
 error_t draw(figure_t &, drawer_t &drawer);
 
 error_t displayEdges(figure_t &, edgeDisplayer_t &displayer);
-
-//int getLng(const figure_t &figure);
-//edge_t getEdge(const figure_t &figure, const int index);
 
 #endif // FIGURE_H

@@ -17,6 +17,7 @@ enum error
     NO_DISP_ADDER_SET,
     NOT_EDGE,
     POINT_NOT_FOUND,
+    INDEX_TOO_HIGH,
     UNKNOWN_TASK
 };
 
