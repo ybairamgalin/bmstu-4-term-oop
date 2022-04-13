@@ -9,7 +9,10 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    connections.cpp \
+    drawer.cpp \
     edge.cpp \
+    edgeDisplayer.cpp \
     editorDock.cpp \
     errors.cpp \
     figure.cpp \
@@ -17,12 +20,15 @@ SOURCES += \
     mainwindow.cpp \
     point2d.cpp \
     point3d.cpp \
+    points.cpp \
     renderArea.cpp \
     taskHandler.cpp \
     transformationDock.cpp \
     ui.cpp
 
 HEADERS += \
+    connection.h \
+    connections.h \
     drawer.h \
     edge.h \
     edgeDisplayer.h \
@@ -32,6 +38,7 @@ HEADERS += \
     mainwindow.h \
     point2d.h \
     point3d.h \
+    points.h \
     renderArea.h \
     taskHandler.h \
     transformationDock.h \

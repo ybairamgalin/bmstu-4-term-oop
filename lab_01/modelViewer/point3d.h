@@ -30,6 +30,7 @@ point3d scale(point3d point, point3d factor, point3d center = {0, 0, 0});
 point3d rotate(point3d point, point3d angle, point3d center = {0, 0, 0});
 
 point3d neg(const point3d point);
+bool equal(point3d first, point3d second);
 
 std::string toString(point3d point);
 

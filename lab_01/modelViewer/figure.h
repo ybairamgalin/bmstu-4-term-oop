@@ -9,10 +9,13 @@
 #include "errors.h"
 #include "drawer.h"
 #include "edgeDisplayer.h"
+#include "points.h"
+#include "connections.h"
 
-#ifndef MAX_FIGURE_EDGES
-#define MAX_FIGURE_EDGES 1000
-#endif
+
+//#ifndef MAX_FIGURE_EDGES
+//#define MAX_FIGURE_EDGES 1000
+//#endif
 
 struct basis
 {
@@ -25,8 +28,11 @@ typedef struct basis basis_t;
 
 struct figure
 {
-    edge_t edges[MAX_FIGURE_EDGES];
-    int lng;
+    points_t points;
+    connections_t connections;
+
+//    edge_t edges[MAX_FIGURE_EDGES];
+//    int lng;
     basis_t basis;
 };
 
@@ -46,7 +52,7 @@ error_t draw(figure_t &, drawer_t &drawer);
 
 error_t displayEdges(figure_t &, edgeDisplayer_t &displayer);
 
-int getLng(const figure_t &figure);
-edge_t getEdge(const figure_t &figure, const int index);
+//int getLng(const figure_t &figure);
+//edge_t getEdge(const figure_t &figure, const int index);
 
 #endif // FIGURE_H

@@ -29,41 +29,6 @@ error readFigureFromFile(figure_t &figure, const char *filename)
     return err;
 }
 
-static point2d to2d(basis_t &basis, point3d point)
-{
-    point2d newX = mul(basis.vectorX, point3dGetX(point));
-    point2d newY = mul(basis.vectorY, point3dGetY(point));
-    point2d newZ = mul(basis.vectorZ, point3dGetZ(point));
-
-    point2d result = add(newX, newY);
-    result = add(result, newZ);
-
-    return result;
-}
-
-static error_t drawEdge(basis_t &basis, edge_t edge, drawer_t &drawer)
-{
-    if (!drawer.lineDrawer)
-        return NO_DRAWER_SET;
-
-    point2d first = to2d(basis, p1(edge));
-    point2d second = to2d(basis, p2(edge));
-
-    drawer.lineDrawer(*(drawer.canvas), first, second);
-
-    return OK;
-}
-
-static error_t clearAll(drawer_t drawer)
-{
-    if (!drawer.cleaner)
-        return NO_CLEANER_SET;
-
-    drawer.cleaner(*drawer.canvas);
-
-    return OK;
-}
-
 static basis_t basisInit()
 {
     basis_t basis;
@@ -77,7 +42,8 @@ static basis_t basisInit()
 
 static void setInitValues(figure &figure)
 {
-    figure.lng = 0;
+    figure.points = pointsInit();
+    figure.connections = connectionsInit();
     figure.basis = basisInit();
 }
 
@@ -89,8 +55,15 @@ figure_t &figureInit()
     return *figure;
 }
 
+static void deleteFields(figure_t &figure)
+{
+    pointsDelete(figure.points);
+    connectionsDelete(figure.connections);
+}
+
 error_t figureDelete(figure_t &figure)
 {
+    deleteFields(figure);
     delete &figure;
 
     return OK;
@@ -98,47 +71,57 @@ error_t figureDelete(figure_t &figure)
 
 error_t addEdge(figure_t &figure, const edge &edge)
 {
-    if (figure.lng >= MAX_FIGURE_EDGES)
-        return MAX_EDGES;
+    addPoint(figure.points, p1(edge));
+    addPoint(figure.points, p2(edge));
 
-    figure.edges[figure.lng++] = edge;
+    error_t err = OK;
+    size_t firstIndex = index(figure.points, p1(edge), err);
+    size_t secondIndex = index(figure.points, p2(edge), err);
+
+    if (firstIndex == secondIndex)
+        return NOT_EDGE;
+
+    addConnection(figure.connections,
+                  connection{firstIndex, secondIndex});
+
+//    if (figure.lng >= MAX_FIGURE_EDGES)
+//        return MAX_EDGES;
+
+//    figure.edges[figure.lng++] = edge;
 
     return OK;
 }
 
 error_t translate(figure_t &figure, point3d delta)
 {
-    for (int i = 0; i < figure.lng; i++)
-        figure.edges[i] = translate(figure.edges[i], delta);
+    translate(figure.points, delta);
 
     return OK;
 }
 
 error_t scale(figure_t &figure, point3d factor)
 {
-    for (int i =  0; i < figure.lng; i++)
-        figure.edges[i] = scale(figure.edges[i], factor);
+    scale(figure.points, factor);
 
     return OK;
 }
 
 error_t rotate(figure_t &figure, point3d angle)
 {
-    for (int i =  0; i < figure.lng; i++)
-        figure.edges[i] = rotate(figure.edges[i], angle);
+    rotate(figure.points, angle);
 
     return OK;
 }
 
-int getLng(const figure_t &figure)
-{
-    return figure.lng;
-}
+//int getLng(const figure_t &figure)
+//{
+//    return figure.lng;
+//}
 
-edge_t getEdge(const figure_t &figure, const int index)
-{
-    return figure.edges[index];
-}
+//edge_t getEdge(const figure_t &figure, const int index)
+//{
+//    return figure.edges[index];
+//}
 
 error_t draw(figure_t &figure, drawer_t &drawer)
 {
@@ -148,32 +131,38 @@ error_t draw(figure_t &figure, drawer_t &drawer)
     if (err)
         return err;
 
-    for (int i = 0; i < figure.lng && !err; i++)
-        err = drawEdge(figure.basis, figure.edges[i], drawer);
+    for (size_t i = 0; i < getLng(figure.connections) && !err; i++)
+    {
+        point3d p1 = getPoint(figure.points,
+                              getConnectionP1(figure.connections, i));
+        point3d p2 = getPoint(figure.points,
+                              getConnectionP2(figure.connections, i));
 
-    return OK;
-}
+        err = drawEdge(figure.basis, edge{p1, p2}, drawer);
+    }
 
-static error_t clearDisplay(edgeDisplayer_t &displayer)
-{
-    if (!displayer.cleaner)
-        return NO_DISP_CLEANER_SET;
-
-    displayer.cleaner(*(displayer.display));
-
-    return OK;
+    return err;
 }
 
 error_t displayEdges(figure_t &figure, edgeDisplayer_t &displayer)
 {
     error_t err = OK;
-    err = clearDisplay(displayer);
+    err = cleanDisplay(displayer);
+
+    displayer.cleaner(*(displayer.display));
 
     if (err)
         return err;
 
-    for (int i = 0; i < figure.lng; i++)
-        displayer.adder(*(displayer.display), figure.edges[i]);
+    for (size_t i = 0; i < getLng(figure.connections); i++)
+    {
+        point3d p1 = getPoint(figure.points,
+                              getConnectionP1(figure.connections, i));
+        point3d p2 = getPoint(figure.points,
+                              getConnectionP2(figure.connections, i));
+
+        displayEdge(displayer, edge{p1, p2});
+    }
 
     return OK;
 }

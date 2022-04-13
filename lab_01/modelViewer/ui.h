@@ -26,7 +26,6 @@ typedef struct ui ui_t;
 ui_t *uiCreate(QMainWindow *parent = nullptr);
 void uiDelete(ui_t *ui);
 
-void uiUpdate(ui_t &ui, figure_t &figure);
 edge_t getNewEdge(const ui_t &ui, error &error);
 point3d getScale(ui_t &ui, error &error);
 point3d getRotation(ui_t &ui, error &error);

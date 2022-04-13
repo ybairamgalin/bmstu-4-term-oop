@@ -1,6 +1,4 @@
 #include "taskHandler.h"
-#include "figure.h"
-#include "init.h"
 
 error_t handleTask(const task_t task)
 {
@@ -11,9 +9,6 @@ error_t handleTask(const task_t task)
 
     switch (task.type)
     {
-    case START_UP:
-        err = readFigureFromFile(model, data.filename);
-        break;
     case ADD_EDGE:
         err = addEdge(model, data.edge);
         break;

@@ -130,3 +130,10 @@ point3d neg(const point3d point)
 {
     return point3d{-point.x, -point.y, -point.z};
 }
+
+bool equal(point3d first, point3d second)
+{
+    return first.x == second.x &&
+           first.y == second.y &&
+           first.z == second.z;
+}

@@ -3,9 +3,9 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    task_t task;
-    task.type = START_UP;
-    handleTask(task);
+//    task_t task;
+//    task.type = START_UP;
+//    handleTask(task);
 
     setMinimumSize(minWindowSize);
     ui = uiCreate(this);

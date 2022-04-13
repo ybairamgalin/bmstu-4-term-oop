@@ -16,6 +16,8 @@ enum error
     NO_CLEANER_SET,
     NO_DISP_CLEANER_SET,
     NO_DISP_ADDER_SET,
+    NOT_EDGE,
+    POINT_NOT_FOUND,
     UNKNOWN_TASK
 };
 

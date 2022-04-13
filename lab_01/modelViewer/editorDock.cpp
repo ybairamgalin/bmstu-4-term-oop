@@ -159,7 +159,7 @@ static void clearEdgesList(editorDock_t &dock)
     dock.edgesList->clear();
 }
 
-static void addEdge(editorDock_t &dock, edge_t edge)
+static void textEdge(editorDock_t &dock, edge_t edge)
 {
     QString line = QString::fromStdString(toString(edge.p1) +
                    " <-> " + toString(edge.p2));
@@ -169,20 +169,20 @@ static void addEdge(editorDock_t &dock, edge_t edge)
 
 edgeDisplayer_t getDisplayer(editorDock_t &dock)
 {
-    return edgeDisplayer_t{&dock, clearEdgesList, addEdge};
+    return edgeDisplayer_t{&dock, clearEdgesList, textEdge};
 }
 
-void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
-{
-    dock.edgesList->clear();
-    int lng = getLng(figure);
+//void editorDockUpdate(editorDock_t &dock, const figure_t &figure)
+//{
+//    dock.edgesList->clear();
+//    int lng = getLng(figure);
 
-    for (int i = 0; i < lng; i++)
-    {
-        edge_t edge = getEdge(figure, i);
-        QString line = QString::fromStdString(toString(edge.p1) +
-                       " <-> " + toString(edge.p2));
+//    for (int i = 0; i < lng; i++)
+//    {
+//        edge_t edge = getEdge(figure, i);
+//        QString line = QString::fromStdString(toString(edge.p1) +
+//                       " <-> " + toString(edge.p2));
 
-        dock.edgesList->addItem(line);
-    }
-}
+//        dock.edgesList->addItem(line);
+//    }
+//}

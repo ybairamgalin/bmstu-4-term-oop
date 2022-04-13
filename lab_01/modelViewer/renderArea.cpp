@@ -54,17 +54,17 @@ static point2d to2d(renderArea &renderArea, point3d point)
     return result;
 }
 
-static void drawFigure(renderArea &renderArea, const figure_t &figure)
-{
-    for (int i = 0; i < figure.lng; i++)
-    {
-        point2d p1 = to2d(renderArea, figure.edges[i].p1);
-        point2d p2 = to2d(renderArea, figure.edges[i].p2);
+//static void drawFigure(renderArea &renderArea, const figure_t &figure)
+//{
+//    for (int i = 0; i < figure.lng; i++)
+//    {
+//        point2d p1 = to2d(renderArea, figure.edges[i].p1);
+//        point2d p2 = to2d(renderArea, figure.edges[i].p2);
 
-        renderArea.scene->addLine(point2dGetX(p1), point2dGetY(p1),
-                                  point2dGetX(p2), point2dGetY(p2));
-    }
-}
+//        renderArea.scene->addLine(point2dGetX(p1), point2dGetY(p1),
+//                                  point2dGetX(p2), point2dGetY(p2));
+//    }
+//}
 
 renderArea_t *renderAreaCreate()
 {
@@ -94,7 +94,6 @@ void renderAreaDelete(renderArea &renderArea)
     point2dDelete(*renderArea.vectorY);
     point2dDelete(*renderArea.vectorZ);
     delete renderArea.scene;
-    delete renderArea.scene;
     delete &renderArea;
 }
 
@@ -103,12 +102,12 @@ QWidget *getPaintWidget(renderArea_t *renderArea)
     return renderArea->paintWidget;
 }
 
-void renderAreaUpdate(renderArea &renderArea, const figure_t &figure)
-{
-    renderArea.scene->clear();
-    drawBg(renderArea);
-    drawFigure(renderArea, figure);
-}
+//void renderAreaUpdate(renderArea &renderArea, const figure_t &figure)
+//{
+//    renderArea.scene->clear();
+//    drawBg(renderArea);
+//    drawFigure(renderArea, figure);
+//}
 
 drawer_t getDrawer(renderArea &renderArea)
 {
