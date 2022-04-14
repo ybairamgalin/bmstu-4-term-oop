@@ -45,23 +45,23 @@ static edge_t getEdge(points_t &points, connections_t &cons,
     return edge{p1, p2};
 }
 
-error readFigureFromFile(figure_t &figure, const char *filename)
+error readFromFile(figure_t &figure, const char *filename)
 {
-    FILE *file = fopen(filename, "r");
+    std::ifstream file;
+    file.open(filename);
 
-    if (!file)
+    if (!file.is_open())
         return NO_SUCH_FILE;
 
     figure_t &newFigure = figureInit();
     double x1, y1, z1, x2, y2, z2;
     error_t err = OK;
 
-    while (fscanf(file, "%lf%lf%lf%lf%lf%lf", &x1, &y1, &z1,
-                   &x2, &y2, &z2) == 6 && !err)
+    while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2)
         err = addEdge(newFigure, edge{point3d{x1, y1, z1},
                                       point3d{x2, y2, z2}});
 
-    fclose(file);
+    file.close();
 
     if (err)
     {
@@ -73,12 +73,13 @@ error readFigureFromFile(figure_t &figure, const char *filename)
     return err;
 }
 
-error saveFigureToFile(figure &figure, const char *filename)
+error saveToFile(figure &figure, const char *filename)
 {
     error_t err = OK;
-    FILE *file = fopen(filename, "w");
+    std::ofstream file;
+    file.open(filename);
 
-    if (!file)
+    if (!file.is_open())
         return NO_SUCH_FILE;
 
     for (size_t i = 0; i < getLng(figure.connections); i++)
@@ -86,10 +87,10 @@ error saveFigureToFile(figure &figure, const char *filename)
         edge_t edge = getEdge(figure.points, figure.connections, i, err);
 
         if (!err)
-            fprintf(file, "%s\n", toCString(edge));
+            file << toCString(edge);
     }
 
-    fclose(file);
+    file.close();
 
     return OK;
 }

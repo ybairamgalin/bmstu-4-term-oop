@@ -1,8 +1,7 @@
 #ifndef POINT3D_H
 #define POINT3D_H
 
-#include <QString>
-#include <string.h>
+#include <string>
 #include <math.h>
 
 struct point3d

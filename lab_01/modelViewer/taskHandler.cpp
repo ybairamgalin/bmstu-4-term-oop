@@ -9,10 +9,10 @@ error_t handleTask(task_t task)
     switch (task.type)
     {
     case READ_FROM_FILE:
-        err = readFigureFromFile(model, task.filename);
+        err = readFromFile(model, task.filename);
         break;
     case SAVE_TO_FILE:
-        err = saveFigureToFile(model, task.filename);
+        err = saveToFile(model, task.filename);
         break;
     case ADD_EDGE:
         err = addEdge(model, task.edge);

@@ -1,7 +1,7 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 
-#include <stdio.h>
+#include <fstream>
 
 #include "edge.h"
 #include "point3d.h"
@@ -33,8 +33,8 @@ typedef struct figure figure_t;
 figure_t &figureInit();
 error_t figureDelete(figure_t &);
 
-error_t readFigureFromFile(figure_t &figure, const char *filename);
-error_t saveFigureToFile(figure &figure, const char *filename);
+error_t readFromFile(figure_t &figure, const char *filename);
+error_t saveToFile(figure &figure, const char *filename);
 
 error_t translate(figure_t &, point3d delta);
 error_t scale(figure_t &, point3d factor);
