@@ -87,7 +87,7 @@ error saveToFile(figure &figure, const char *filename)
         edge_t edge = getEdge(figure.points, figure.connections, i, err);
 
         if (!err)
-            file << toCString(edge);
+            file << toCString(edge) << std::endl;
     }
 
     file.close();
