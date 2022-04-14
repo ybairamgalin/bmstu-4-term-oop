@@ -1,8 +1,9 @@
 #include "point3d.h"
 
-#ifndef TO_RAD
-#define TO_RAD(degrees) (degrees) * M_PI / 180.0
-#endif
+static inline double toRad(const double degrees)
+{
+    return degrees * M_PI / 180.0;
+}
 
 point3d *point3dCreate(const double x, const double y,
                        const double z)
@@ -72,7 +73,7 @@ point3d scale(point3d point, point3d factor, point3d center)
 
 static point3d rotateX(const point3d point, const double angle)
 {
-    double angleRad = TO_RAD(angle);
+    double angleRad = toRad(angle);
 
     point3d result;
     result.x = point.x;
@@ -84,7 +85,7 @@ static point3d rotateX(const point3d point, const double angle)
 
 static point3d rotateY(const point3d point, const double angle)
 {
-    double angleRad = TO_RAD(angle);
+    double angleRad = toRad(angle);
 
     point3d result;
     result.x = point.x * cos(angleRad) - point.z * sin(angleRad);
@@ -96,7 +97,7 @@ static point3d rotateY(const point3d point, const double angle)
 
 static point3d rotateZ(const point3d point, const double angle)
 {
-    double angleRad = TO_RAD(angle);
+    double angleRad = toRad(angle);
 
     point3d result;
     result.x = point.x * cos(angleRad) - point.y * sin(angleRad);
