@@ -21,31 +21,42 @@ error_t figureDelete(figure_t &figure)
     return OK;
 }
 
+static error_t setFigureFromFile(figure_t &figure, std::ifstream &file)
+{
+    edge_t edge;
+    error_t rc;
+
+    while (!(rc = readEdgeFromFile(edge, file)) &&
+           !(rc = addEdge(figure, edge))) ;
+
+    return (rc == END_OF_FILE) ? OK : READ_ERR;
+}
+
 static void move(figure_t &dest, figure_t &source)
 {
     deleteFields(dest);
     dest = source;
-    delete &source;
 }
 
 
-static edge_t getEdge(points_t &points, connections_t &cons,
-                      size_t index, error_t &err)
+static error_t getEdge(edge_t &edge, points_t &points,
+                       connections_t &cons, size_t index)
 {
     if (index >= getLng(cons))
     {
-        err = INDEX_TOO_HIGH;
-        return edge{point3d{0, 0, 0}, point3d{0, 0, 0}};
+        edge = edge_t{point3d{0, 0, 0}, point3d{0, 0, 0}};
+        return INDEX_TOO_HIGH;
     }
 
     point3d p1 = getPoint(points, getConnectionP1(cons, index));
     point3d p2 = getPoint(points, getConnectionP2(cons, index));
 
-    err = OK;
-    return edge{p1, p2};
+    edge = edge_t{p1, p2};
+
+    return OK;
 }
 
-error readFromFile(figure_t &figure, const char *filename)
+error_t readFromFile(figure_t &figure, const char *filename)
 {
     std::ifstream file;
     file.open(filename);
@@ -54,22 +65,16 @@ error readFromFile(figure_t &figure, const char *filename)
         return NO_SUCH_FILE;
 
     figure_t &newFigure = figureInit();
-    double x1, y1, z1, x2, y2, z2;
-    error_t err = OK;
-
-    while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2)
-        err = addEdge(newFigure, edge{point3d{x1, y1, z1},
-                                      point3d{x2, y2, z2}});
-
+    error_t err = setFigureFromFile(newFigure, file);
     file.close();
 
-    if (err)
-    {
-        figureDelete(newFigure);
-        return err;
-    }
+    if (!err)
+        move(figure, newFigure);
+    else
+        deleteFields(newFigure);
 
-    move(figure, newFigure);
+    delete &newFigure;
+
     return err;
 }
 
@@ -82,9 +87,10 @@ error saveToFile(figure &figure, const char *filename)
     if (!file.is_open())
         return NO_SUCH_FILE;
 
-    for (size_t i = 0; i < getLng(figure.connections); i++)
+    for (size_t i = 0; i < getLng(figure.connections) && !err; i++)
     {
-        edge_t edge = getEdge(figure.points, figure.connections, i, err);
+        edge_t edge;
+        err = getEdge(edge, figure.points, figure.connections, i);
 
         if (!err)
             file << toCString(edge) << std::endl;
@@ -177,7 +183,8 @@ error_t draw(figure_t &figure, drawer_t &drawer)
 
     for (size_t i = 0; i < getLng(figure.connections) && !err; i++)
     {
-        edge_t edge = getEdge(figure.points, figure.connections, i, err);
+        edge_t edge;
+        err = getEdge(edge, figure.points, figure.connections, i);
 
         if (!err)
             err = drawEdge(figure.basis, edge, drawer);
@@ -198,7 +205,8 @@ error_t displayEdges(figure_t &figure, edgeDisplayer_t &displayer)
 
     for (size_t i = 0; i < getLng(figure.connections) && !err; i++)
     {
-        edge_t edge = getEdge(figure.points, figure.connections, i, err);
+        edge_t edge;
+        err = getEdge(edge, figure.points, figure.connections, i);
 
         if (!err)
             displayEdge(displayer, edge);

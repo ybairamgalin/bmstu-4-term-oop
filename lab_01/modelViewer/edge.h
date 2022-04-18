@@ -1,7 +1,10 @@
 #ifndef EDGE_H
 #define EDGE_H
 
+#include <fstream>
+
 #include "point3d.h"
+#include "errors.h"
 
 struct edge
 {
@@ -10,6 +13,10 @@ struct edge
 };
 
 typedef struct edge edge_t;
+
+edge_t fromPoints(double x1, double y1, double z1,
+                  double x2, double y2, double z2);
+error_t readEdgeFromFile(edge_t &edge, std::ifstream &file);
 
 edge_t translate(edge_t edge, point3d delta);
 edge_t scale(edge_t edge, point3d factor, point3d center = {0.0, 0.0, 0.0});

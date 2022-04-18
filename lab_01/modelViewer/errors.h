@@ -18,6 +18,8 @@ enum error
     NOT_EDGE,
     POINT_NOT_FOUND,
     INDEX_TOO_HIGH,
+    READ_ERR,
+    END_OF_FILE,
     UNKNOWN_TASK
 };
 

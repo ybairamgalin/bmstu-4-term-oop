@@ -1,8 +1,26 @@
+#include <fstream>
+
 #include "point3d.h"
 
 static inline double toRad(const double degrees)
 {
     return degrees * M_PI / 180.0;
+}
+
+error_t readPointFromFile(point3d &point, std::ifstream &file)
+{
+    if (!file.is_open())
+        return NO_SUCH_FILE;
+
+    double x, y, z;
+    error_t err = OK;
+
+    if (file >> x >> y >> z)
+        point = point3d{x, y, z};
+    else
+        err = READ_ERR;
+
+    return err;
 }
 
 point3d *point3dCreate(const double x, const double y,

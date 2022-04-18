@@ -8,4 +8,7 @@ include_directories(inc)
 add_executable(myVector
         src/main.cpp
         src/myvector.cpp
+        inc/myvector.hpp
+        src/myiterator.cpp
+        inc/myiterator.hpp
         )
