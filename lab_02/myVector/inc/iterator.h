@@ -7,18 +7,22 @@ class MyVector;
 template <typename T>
 class Iterator
 {
-    typedef std::weak_ptr<T> pointer;
+    typedef std::weak_ptr<T[]> pointer;
 public:
     explicit Iterator(MyVector<T> &vector, size_t pos = 0);
-
     Iterator(const Iterator<T> &iter);
     Iterator(Iterator<T> &&iter) noexcept;
+
     Iterator<T> &operator=(const Iterator<T> &iter);
 
     Iterator<T> &operator++();
     Iterator<T> operator++(int);
 
     bool operator==(const Iterator<T> &iter) const;
+    bool operator!=(const Iterator<T> &iter) const;
+
+    T &operator*();
+    T* operator->();
 private:
     pointer ptr;
     size_t index;
@@ -26,4 +30,4 @@ private:
 
 #include "iterator.hpp"
 
-#endif
+#endif // __ITERATOR_H__

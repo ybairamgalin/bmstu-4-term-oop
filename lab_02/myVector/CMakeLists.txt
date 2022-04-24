@@ -8,11 +8,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories(inc)
 include_directories(src)
 
-add_executable(myVector
+add_subdirectory(googletest)
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+add_executable(myVectorGoogleTest
         tests/testmain.cpp
         src/myvector.hpp
         inc/myvector.h
         src/iterator.hpp
         inc/iterator.h
         inc/basecontainer.h
+        inc/constiterator.h
+        inc/myvectorexceptions.h
+        src/constiterator.hpp)
+
+target_link_libraries(
+        myVectorGoogleTest
+        gtest
+        gtest_main
 )

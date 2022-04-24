@@ -4,25 +4,16 @@
 #include "iterator.h"
 
 template<typename T>
-Iterator<T>::Iterator(MyVector<T> &vector, size_t pos)
-{
-    ptr = vector.data;
-    index = pos;
-}
+Iterator<T>::Iterator(MyVector<T> &vector, size_t pos) :
+        ptr(vector.data), index(pos) { }
 
 template<typename T>
-Iterator<T>::Iterator(const Iterator<T> &iter)
-{
-    index = iter.index;
-    ptr = iter.ptr;
-}
+Iterator<T>::Iterator(const Iterator<T> &iter) :
+        ptr(iter.ptr), index(iter.index) { }
 
 template<typename T>
-Iterator<T>::Iterator(Iterator<T> &&iter) noexcept
-{
-    index = iter.index;
-    ptr = iter.ptr;
-}
+Iterator<T>::Iterator(Iterator<T> &&iter) noexcept :
+        ptr(iter.ptr), index(iter.index) { }
 
 template<typename T>
 Iterator<T> &Iterator<T>::operator=(const Iterator<T> &iter)
@@ -53,7 +44,25 @@ Iterator<T> Iterator<T>::operator++(int)
 template<typename T>
 bool Iterator<T>::operator==(const Iterator<T> &iter) const
 {
-    return ptr == iter.ptr && index == iter.index;
+    return ptr.lock() == iter.ptr.lock() && index == iter.index;
+}
+
+template<typename T>
+bool Iterator<T>::operator!=(const Iterator<T> &iter) const
+{
+    return !(*this == iter);
+}
+
+template<typename T>
+T &Iterator<T>::operator*()
+{
+    return ptr.lock()[index];
+}
+
+template<typename T>
+T *Iterator<T>::operator->()
+{
+    return &(ptr.lock()[index]);
 }
 
 #endif // __ITERATOR_HPP__

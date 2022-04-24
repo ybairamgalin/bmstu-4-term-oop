@@ -10,7 +10,7 @@ public:
     virtual void clear() = 0;
 
 protected:
-    size_t size = 0;
+    size_t sz = 0;
 };
 
 #endif
