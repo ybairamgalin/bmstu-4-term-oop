@@ -13,6 +13,16 @@ TEST_F(MyVectorTestNegative, constructorFromArray)
     EXPECT_THROW(MyVector<int> vector(3, nullptr), NullPtrException);
 }
 
+TEST_F(MyVectorTestNegative, worngVectorDims)
+{
+    int arr[5] = { 10, 11, 12, 13, 14 };
+
+    MyVector<int> first(5, arr);
+    MyVector<int> second(4, arr);
+
+    EXPECT_THROW(first += second, InappropriateDimensions);
+}
+
 TEST_F(MyVectorTestPositive, constructorFromArray)
 {
     int arr[5] = { 10, 11, 12, 13, 14 };
@@ -94,7 +104,7 @@ TEST_F(MyVectorTestPositive, equalSimple)
     second[2] = 100;
     second[3] = 1000;
 
-    EXPECT_EQ(true, first == second);
+    EXPECT_TRUE(first == second);
 }
 
 TEST_F(MyVectorTestPositive, nequalSimple)
@@ -113,7 +123,7 @@ TEST_F(MyVectorTestPositive, nequalSimple)
     second[2] = 100;
     second[3] = 10000;
 
-    EXPECT_EQ(false, first == second);
+    EXPECT_TRUE(first != second);
 }
 
 TEST_F(MyVectorTestPositive, nequalSize)
@@ -133,7 +143,7 @@ TEST_F(MyVectorTestPositive, nequalSize)
     second[3] = 1000;
     second[3] = 0;
 
-    EXPECT_EQ(false, first == second);
+    EXPECT_TRUE(first != second);
 }
 
 TEST_F(MyVectorTestPositive, isEmptyNormal)
@@ -146,7 +156,7 @@ TEST_F(MyVectorTestPositive, isEmptyNormal)
     notEmpty[0] = 10;
     notEmpty[1] = 20;
 
-    EXPECT_EQ(false, notEmpty.isEmpty());
+    EXPECT_FALSE(notEmpty.isEmpty());
 }
 
 TEST_F(MyVectorTestPositive, pushBackEmpty)
