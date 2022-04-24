@@ -73,7 +73,17 @@ void MyVector<T>::clear()
 template<typename T>
 void MyVector<T>::allocate(size_t size)
 {
-    data = std::shared_ptr<T[]>(new T[size]()); // TODO ADD MEM ALLOCATION CHECK
+    try
+    {
+        data = std::shared_ptr<T[]>(new T[size]());
+    }
+    catch (std::bad_alloc &)
+    {
+        time_t currTime = std::time(nullptr);
+        throw BadAllocation(__FILE__, typeid(*this).name(), __LINE__,
+                               ctime(&currTime));
+    }
+
     capacity = size;
 }
 

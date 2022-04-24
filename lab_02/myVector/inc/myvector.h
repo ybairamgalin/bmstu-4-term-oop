@@ -11,10 +11,10 @@
 template <typename T>
 class MyVector : public BaseContainer
 {
-    typedef std::shared_ptr<T[]> pointer;
-    typedef MyVector<T> Vector;
-    typedef Iterator<T> Iter;
-    typedef ConstIterator<T> CIter;
+    using pointer = std::shared_ptr<T[]>;
+    using Vector = MyVector<T>;
+    using Iter = Iterator<T>;
+    using CIter = ConstIterator<T>;
     using BaseContainer::sz;
 
     friend Iterator<T>;
