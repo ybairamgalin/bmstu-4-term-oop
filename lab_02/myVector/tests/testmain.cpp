@@ -148,3 +148,97 @@ TEST_F(MyVectorTestPositive, isEmptyNormal)
 
     EXPECT_EQ(false, notEmpty.isEmpty());
 }
+
+TEST_F(MyVectorTestPositive, pushBackEmpty)
+{
+    MyVector<int> vector;
+
+    vector.pushBack(123);
+
+    EXPECT_EQ(1, vector.size());
+    EXPECT_EQ(123, vector[0]);
+}
+
+TEST_F(MyVectorTestPositive, pushBackFull)
+{
+    MyVector<int> vector(3);
+
+    EXPECT_EQ(3, vector.size());
+
+    vector[0] = 2;
+    vector[1] = 4;
+    vector[2] = 8;
+
+    EXPECT_EQ(3, vector.size());
+
+    vector.pushBack(16);
+
+    EXPECT_EQ(4, vector.size());
+    EXPECT_EQ(16, vector[3]);
+
+}
+
+TEST_F(MyVectorTestPositive, unaryMinus)
+{
+    MyVector<int> vector(3);
+
+    EXPECT_EQ(3, vector.size());
+
+    vector[0] = 2;
+    vector[1] = 4;
+    vector[2] = 8;
+
+     MyVector<int> newVector(-vector);
+
+    EXPECT_EQ(-2, newVector[0]);
+    EXPECT_EQ(-4, newVector[1]);
+    EXPECT_EQ(-8, newVector[2]);
+
+    EXPECT_EQ(3, newVector.size());
+}
+
+TEST_F(MyVectorTestPositive, addition)
+{
+    MyVector<int> first(3);
+
+    first[0] = 2;
+    first[1] = 4;
+    first[2] = 8;
+
+    MyVector<int> second(3);
+
+    second[0] = 10;
+    second[1] = 10;
+    second[2] = 10;
+
+    MyVector<int> result = first + second;
+
+    EXPECT_EQ(3, result.size());
+
+    EXPECT_EQ(result[0], 12);
+    EXPECT_EQ(result[1], 14);
+    EXPECT_EQ(result[2], 18);
+}
+
+TEST_F(MyVectorTestPositive, additionEq)
+{
+    MyVector<int> first(3);
+
+    first[0] = 2;
+    first[1] = 4;
+    first[2] = 8;
+
+    MyVector<int> second(3);
+
+    second[0] = 10;
+    second[1] = 10;
+    second[2] = 10;
+
+    first += second;
+
+    EXPECT_EQ(3, first.size());
+
+    EXPECT_EQ(first[0], 12);
+    EXPECT_EQ(first[1], 14);
+    EXPECT_EQ(first[2], 18);
+}

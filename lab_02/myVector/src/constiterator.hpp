@@ -6,7 +6,7 @@
 
 template<typename T>
 ConstIterator<T>::ConstIterator(const MyVector<T> &vector, size_t pos) :
-        ptr(vector.data), index(pos) { }
+        ptr(vector.getData()), index(pos) { }
 
 template<typename T>
 ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter) :
@@ -77,6 +77,13 @@ const T &ConstIterator<T>::operator*()
 template<typename T>
 const T *ConstIterator<T>::operator->()
 {
+    if (ptr.expired())
+    {
+        time_t currTime = std::time(nullptr);
+        throw DataExpired(__FILE__, typeid(*this).name(), __LINE__,
+                          ctime(&currTime));
+    }
+
     return &(ptr.lock()[index]);
 }
 

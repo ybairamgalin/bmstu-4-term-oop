@@ -5,7 +5,7 @@
 
 template<typename T>
 Iterator<T>::Iterator(MyVector<T> &vector, size_t pos) :
-        ptr(vector.data), index(pos) { }
+        ptr(vector.getData()), index(pos) { }
 
 template<typename T>
 Iterator<T>::Iterator(const Iterator<T> &iter) :

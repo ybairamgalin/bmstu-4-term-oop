@@ -37,6 +37,26 @@ MyVector<T>::MyVector(size_t size, const T *arr)
 }
 
 template<typename T>
+MyVector<T> &MyVector<T>::operator=(const MyVector::Vector &vector)
+{
+    allocate(vector.capacity);
+    sz = vector.sz;
+    std::copy_n(vector.cbegin(), sz, begin());
+
+    return *this;
+}
+
+template<typename T>
+MyVector<T> &MyVector<T>::operator=(MyVector::Vector &&vector) noexcept
+{
+    allocate(vector.capacity);
+    sz = vector.sz;
+    std::copy_n(vector.cbegin(), sz, begin());
+
+    return *this;
+}
+
+template<typename T>
 bool MyVector<T>::isEmpty() const
 {
     return sz == 0;
@@ -79,7 +99,8 @@ typename MyVector<T>::Iter MyVector<T>::end()
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator+(MyVector::Vector &vec)
+typename MyVector<T>::Vector MyVector<T>::operator+(
+        const MyVector::Vector &vec) const
 {
     MyVector<T> newVector(*this);
     newVector += vec;
@@ -88,13 +109,19 @@ typename MyVector<T>::Vector &MyVector<T>::operator+(MyVector::Vector &vec)
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator+=(MyVector::Vector &other)
+typename MyVector<T>::Vector &MyVector<T>::operator+=(
+        const MyVector::Vector &other)
 {
     if (sz != other.sz)
-        throw;
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
 
-    for (Iter a = begin(), b = other.begin(); a != end() && b != other.end();
-         a++, b++)
+    CIter b = other.cbegin();
+
+    for (Iter a = begin(); a != end() && b != other.cend(); a++, b++)
         *a += *b;
 
     return *this;
@@ -120,11 +147,24 @@ T &MyVector<T>::operator[](size_t index)
 }
 
 template<typename T>
+const T &MyVector<T>::operator[](size_t index) const
+{
+    if (index >= sz)
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+
+    return *ConstIterator<T>(*this, index);
+}
+
+template<typename T>
 void MyVector<T>::reallocate()
 {
     Vector tmp(*this);
 
-    capacity *= 2;
+    capacity += allocationStep;
     allocate(capacity);
 
     std::copy(tmp.cbegin(), tmp.cend(), begin());
@@ -143,7 +183,7 @@ typename MyVector<T>::CIter MyVector<T>::cend() const
 }
 
 template<typename T>
-bool MyVector<T>::operator==(MyVector::Vector &vec) const
+bool MyVector<T>::operator==(const MyVector::Vector &vec) const
 {
     if (this == &vec)
         return true;
@@ -162,9 +202,26 @@ bool MyVector<T>::operator==(MyVector::Vector &vec) const
 }
 
 template<typename T>
-bool MyVector<T>::operator!=(MyVector::Vector &vec) const
+bool MyVector<T>::operator!=(const MyVector::Vector &vec) const
 {
     return !(*this == vec);
+}
+
+template<typename T>
+typename MyVector<T>::pointer MyVector<T>::getData() const
+{
+    return data;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator-()
+{
+    MyVector<T> newVector;
+
+    for (auto element: *this)
+        newVector.pushBack(-element);
+
+    return newVector;
 }
 
 #endif // _MY_VECTOR_HPP_

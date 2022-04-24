@@ -12,11 +12,11 @@ template<typename T>
 class ConstIterator
 {
 public:
-    using iterator_category  = std::input_iterator_tag;
-    using difference_type    = std::ptrdiff_t;
-    using value_type         = T;
-    using pointer            = std::weak_ptr<T[]>;
-    using reference          = int&;
+    using iterator_category = std::input_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = std::weak_ptr<T[]>;
+    using reference = T&;
 
     explicit ConstIterator(const MyVector<T> &vector, size_t pos = 0);
     ConstIterator(const ConstIterator<T> &iter);

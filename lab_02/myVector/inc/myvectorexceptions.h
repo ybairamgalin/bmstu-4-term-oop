@@ -74,4 +74,20 @@ public:
     }
 };
 
+class InappropriateDimensions : public MyVectorException
+{
+public:
+    InappropriateDimensions(const std::string& filename,
+                    const std::string& classname, int line, const char *time,
+                    const std::string& info = "Dimensions are not suitable "
+                                              "for these operation") :
+            MyVectorException(filename, classname,
+                              line, time, info) { }
+
+    [[nodiscard]] const char *what() const noexcept override
+    {
+        return errInfo.c_str();
+    }
+};
+
 #endif // __MY_VECTOR_EXCEPTIONS_H__

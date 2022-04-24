@@ -7,7 +7,11 @@ class MyVector;
 template <typename T>
 class Iterator
 {
-    typedef std::weak_ptr<T[]> pointer;
+    using iterator_category = std::output_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = std::weak_ptr<T[]>;
+    using reference = T&;
 public:
     explicit Iterator(MyVector<T> &vector, size_t pos = 0);
     Iterator(const Iterator<T> &iter);
