@@ -13,7 +13,7 @@ TEST_F(MyVectorTestNegative, constructorFromArray)
     EXPECT_THROW(MyVector<int> vector(3, nullptr), NullPtrException);
 }
 
-TEST_F(MyVectorTestNegative, worngVectorDims)
+TEST_F(MyVectorTestNegative, wrongDimsAddition)
 {
     int arr[5] = { 10, 11, 12, 13, 14 };
 
@@ -78,7 +78,7 @@ TEST_F(MyVectorTestPositive, stdCopy)
     source[2] = 900;
     source[3] = 9000;
 
-    MyVector<int> dest(6);
+    MyVector<int> dest(7);
 
     std::copy(source.cbegin(), source.cend(), dest.begin());
 
@@ -251,4 +251,89 @@ TEST_F(MyVectorTestPositive, additionEq)
     EXPECT_EQ(first[0], 12);
     EXPECT_EQ(first[1], 14);
     EXPECT_EQ(first[2], 18);
+}
+
+TEST_F(MyVectorTestPositive, addNumber)
+{
+    MyVector<int> first(3);
+
+    first[0] = 2;
+    first[1] = 4;
+    first[2] = 8;
+
+    MyVector<int> result = first + 10;
+
+    EXPECT_EQ(3, first.size());
+
+    EXPECT_EQ(result[0], 12);
+    EXPECT_EQ(result[1], 14);
+    EXPECT_EQ(result[2], 18);
+}
+
+TEST_F(MyVectorTestPositive, subtractNumber)
+{
+    MyVector<int> first(3);
+
+    first[0] = 2;
+    first[1] = 4;
+    first[2] = 8;
+
+    MyVector<int> result = first - 10;
+
+    EXPECT_EQ(3, first.size());
+
+    EXPECT_EQ(result[0], -8);
+    EXPECT_EQ(result[1], -6);
+    EXPECT_EQ(result[2], -2);
+}
+
+TEST_F(MyVectorTestPositive, scalarProduct)
+{
+    MyVector<double> first(3);
+    first[0] = 2.0;
+    first[1] = 4.0;
+    first[2] = 8.0;
+
+    MyVector<double> second(3);
+    second[0] = -2.0;
+    second[1] = -3.0;
+    second[2] = -4.0;
+
+    double result = first.scalarProduct(second);
+
+    EXPECT_DOUBLE_EQ(result, -48.0);
+}
+
+TEST_F(MyVectorTestPositive, angle)
+{
+    MyVector<double> first(2);
+    first[0] = 2.0;
+    first[1] = 1.0;
+
+    MyVector<double> second(2);
+    second[0] = -1.0;
+    second[1] = 2.0;
+
+    double result = first.angle(second);
+
+    EXPECT_DOUBLE_EQ(result, M_PI / 2);
+}
+
+TEST_F(MyVectorTestPositive, at)
+{
+    MyVector<double> first(2);
+    first[0] = 2.0;
+    first[1] = 1.0;
+
+    EXPECT_DOUBLE_EQ(first.at(0), 2.0);
+    EXPECT_DOUBLE_EQ(first.at(1), 1.0);
+
+    MyVector<int> tmp(2);
+    tmp[0] = 5;
+    tmp[1] = 10;
+
+    const MyVector<int> second(tmp);
+
+    EXPECT_EQ(second.at(0), 5);
+    EXPECT_EQ(second.at(1), 10);
 }

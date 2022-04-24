@@ -99,32 +99,15 @@ typename MyVector<T>::Iter MyVector<T>::end()
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator+(
-        const MyVector::Vector &vec) const
+typename MyVector<T>::CIter MyVector<T>::begin() const
 {
-    MyVector<T> newVector(*this);
-    newVector += vec;
-
-    return newVector;
+    return cbegin();
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator+=(
-        const MyVector::Vector &other)
+typename MyVector<T>::CIter MyVector<T>::end() const
 {
-    if (sz != other.sz)
-    {
-        time_t currTime = std::time(nullptr);
-        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
-                              ctime(&currTime));
-    }
-
-    CIter b = other.cbegin();
-
-    for (Iter a = begin(); a != end() && b != other.cend(); a++, b++)
-        *a += *b;
-
-    return *this;
+    return cend();
 }
 
 template<typename T>
@@ -222,6 +205,182 @@ typename MyVector<T>::Vector MyVector<T>::operator-()
         newVector.pushBack(-element);
 
     return newVector;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator+(
+        const MyVector::Vector &vec) const
+{
+    MyVector<T> newVector(*this);
+    newVector += vec;
+
+    return newVector;
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator+=(
+        const MyVector::Vector &other)
+{
+    if (sz != other.sz)
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                                      ctime(&currTime));
+    }
+
+    CIter b = other.cbegin();
+
+    for (Iter a = begin(); a != end() && b != other.cend(); a++, b++)
+        *a += *b;
+
+    return *this;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator-(
+        const MyVector::Vector &other) const
+{
+    return *this + (-other);
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator-=(
+        const MyVector::Vector &other)
+{
+    *this += -other;
+
+    return *this;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator+(const double number) const
+{
+    MyVector<T> newVector(*this);
+
+    for (auto &element: newVector)
+        element += number;
+
+    return newVector;
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator+=(const double number)
+{
+    for (auto &element: *this)
+        element += number;
+
+    return *this;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator-(const double number) const
+{
+    return *this + (-number);
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator-=(double number)
+{
+    *this += -number;
+
+    return *this;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator*(
+        const MyVector::Vector &other) const
+{
+    // TODO
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator*=(
+        const MyVector::Vector &other) const
+{
+    // TODO
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator*(double number) const
+{
+    MyVector<T> newVector(*this);
+
+    for (auto &element: newVector)
+        element *= number;
+
+    return newVector;
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator*=(double number)
+{
+    for (auto &element: *this)
+        element *= number;
+
+    return *this;
+}
+
+template<typename T>
+double MyVector<T>::scalarProduct(const MyVector::Vector &other) const
+{
+    if (sz != other.sz)
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                                      ctime(&currTime));
+    }
+
+    double sum = 0;
+
+    for (CIter a = cbegin(), b = other.cbegin(); a != cend() && b != cend();
+            ++a, ++b)
+        sum += *a * *b;
+
+    return sum;
+}
+
+template<typename T>
+double MyVector<T>::angle(const MyVector::Vector &other) const
+{
+    double angleCos = scalarProduct(other) / (length() * other.length());
+
+    return std::acos(angleCos);
+}
+
+template<typename T>
+double MyVector<T>::length() const
+{
+    double squaresSum = 0;
+
+    for (const auto &element: *this)
+        squaresSum += element * element;
+
+    return std::sqrt(squaresSum);
+}
+
+template<typename T>
+T& MyVector<T>::at(size_t index)
+{
+    return (*this)[index];
+}
+
+template<typename T>
+const T& MyVector<T>::at(size_t index) const
+{
+    return (*this)[index];
+}
+
+template<typename T>
+double scalarProduct(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first.scalarProduct(second);
+}
+
+
+template<typename T>
+double angle(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first.angle(second);
 }
 
 #endif // _MY_VECTOR_HPP_
