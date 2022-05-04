@@ -277,15 +277,17 @@ typename MyVector<T>::Vector &MyVector<T>::operator+=(
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator-(
-        const MyVector::Vector &other) const
+template<typename OtherVector>
+decltype(auto) MyVector<T>::operator-(
+        const OtherVector &other) const
 {
     return *this + (-other);
 }
 
 template<typename T>
+template<typename OtherVector>
 typename MyVector<T>::Vector &MyVector<T>::operator-=(
-        const MyVector::Vector &other)
+        const OtherVector &other)
 {
     *this += -other;
 
@@ -293,7 +295,8 @@ typename MyVector<T>::Vector &MyVector<T>::operator-=(
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator+(const double number) const
+template<typename NumType>
+decltype(auto) MyVector<T>::operator+(const NumType& number) const
 {
     MyVector<T> newVector(*this);
 
@@ -304,7 +307,8 @@ typename MyVector<T>::Vector MyVector<T>::operator+(const double number) const
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator+=(const double number)
+template<typename NumType>
+typename MyVector<T>::Vector &MyVector<T>::operator+=(const NumType& number)
 {
     for (auto &element: *this)
         element += number;
@@ -313,13 +317,15 @@ typename MyVector<T>::Vector &MyVector<T>::operator+=(const double number)
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator-(const double number) const
+template<typename NumType>
+decltype(auto) MyVector<T>::operator-(const NumType& number) const
 {
     return *this + (-number);
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator-=(double number)
+template<typename NumType>
+typename MyVector<T>::Vector &MyVector<T>::operator-=(const NumType& number)
 {
     *this += -number;
 
@@ -360,7 +366,8 @@ typename MyVector<T>::Vector &MyVector<T>::operator*=(
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator*(double number) const
+template<typename NumType>
+decltype(auto) MyVector<T>::operator*(const NumType& number) const
 {
     MyVector<T> newVector(*this);
 
@@ -371,7 +378,8 @@ typename MyVector<T>::Vector MyVector<T>::operator*(double number) const
 }
 
 template<typename T>
-typename MyVector<T>::Vector &MyVector<T>::operator*=(double number)
+template<typename NumType>
+typename MyVector<T>::Vector &MyVector<T>::operator*=(const NumType& number)
 {
     for (auto &element: *this)
         element *= number;
@@ -380,7 +388,7 @@ typename MyVector<T>::Vector &MyVector<T>::operator*=(double number)
 }
 
 template<typename T>
-double MyVector<T>::scalarProduct(const MyVector::Vector &other) const
+decltype(auto) MyVector<T>::scalarProduct(const MyVector::Vector &other) const
 {
     if (sz != other.sz)
     {
@@ -389,7 +397,7 @@ double MyVector<T>::scalarProduct(const MyVector::Vector &other) const
                                       ctime(&currTime));
     }
 
-    double sum = 0;
+    auto sum = 0;
 
     for (CIter a = cbegin(), b = other.cbegin(); a != cend() && b != cend();
             ++a, ++b)
@@ -409,15 +417,15 @@ double MyVector<T>::angle(const MyVector::Vector &other) const
     }
 
     double angleCos = scalarProduct(other) /
-            length().real() * other.length().real();
+            length() * other.length();
 
     return std::acos(angleCos);
 }
 
 template<typename T>
-std::complex<double> MyVector<T>::length() const
+decltype(auto) MyVector<T>::length() const
 {
-    std::complex<double> squaresSum = 0;
+    auto squaresSum = 0;
 
     for (const auto &element: *this)
         squaresSum += element * element;
@@ -444,46 +452,58 @@ typename MyVector<T>::Vector MyVector<T>::add(const MyVector::Vector &vec) const
 }
 
 template<typename T>
-void MyVector<T>::plus(const MyVector::Vector &vec)
+typename MyVector<T>::Vector& MyVector<T>::plus(const MyVector::Vector &vec)
 {
     *this += vec;
+
+    return *this;
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::subtract(
+decltype(auto) MyVector<T>::subtract(
         const MyVector::Vector &other) const
 {
     return *this - other;
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::add(double number) const
+template<typename NumType>
+decltype(auto) MyVector<T>::add(const NumType& number) const
 {
     return *this + number;
 }
 
 template<typename T>
-void MyVector<T>::plus(double number)
+template<typename NumType>
+typename MyVector<T>::Vector& MyVector<T>::plus(const NumType& number)
 {
     *this += number;
+
+    return *this;
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::subtract(double number) const
+template<typename NumType>
+decltype(auto) MyVector<T>::subtract(const NumType& number) const
 {
     return *this - number;
 }
 
 template<typename T>
-void MyVector<T>::minus(double number)
+template<typename NumType>
+typename MyVector<T>::Vector& MyVector<T>::minus(const NumType& number)
 {
     *this -= number;
+
+    return *this;
 }
 
 template<typename T>
-void MyVector<T>::minus(const MyVector::Vector &other)
+typename MyVector<T>::Vector& MyVector<T>::minus(const MyVector::Vector &other)
 {
     *this -= other;
+
+    return *this;
 }
 
 template<typename T>
@@ -494,15 +514,20 @@ typename MyVector<T>::Vector MyVector<T>::dotProduct(
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::multiply(double number) const
+template<typename NumType>
+typename MyVector<T>::Vector MyVector<T>::multiply(const NumType &number) const
 {
     return *this *number;
 }
 
 template<typename T>
-void MyVector<T>::multiplyByNumber(double number)
+template<typename NumType>
+typename MyVector<T>::Vector& MyVector<T>::multiplyByNumber(
+        const NumType& number)
 {
     *this += number;
+
+    return *this;
 }
 
 template<typename T>
@@ -528,7 +553,7 @@ typename MyVector<T>::Vector MyVector<T>::elementMultiply(
 }
 
 template<typename T>
-void MyVector<T>::multiplyByElement(const MyVector<T>::Vector &other)
+typename MyVector<T>::Vector& MyVector<T>::multiplyByElement(const MyVector<T>::Vector &other)
 {
     if (sz != other.sz)
     {
@@ -542,6 +567,8 @@ void MyVector<T>::multiplyByElement(const MyVector<T>::Vector &other)
 
     for ( ; first != end(); ++first, ++second)
         *first = *first * *second;
+
+    return *this;
 }
 
 template<typename T>
@@ -579,9 +606,32 @@ double MyVector<T>::getEps() const noexcept
 }
 
 template<typename T>
-void MyVector<T>::multiplyByVector(const MyVector::Vector &other) const
+typename MyVector<T>::Vector& MyVector<T>::multiplyByVector(
+        const MyVector::Vector &other) const
 {
     *this *= other;
+
+    return *this;
+}
+
+template<typename T>
+decltype(auto) MyVector<T>::operator&(const MyVector::Vector &other) const
+{
+    return scalarProduct(other);
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::operator%(
+        const MyVector::Vector &other) const
+{
+    return elementMultiply(other);
+}
+
+template<typename T>
+typename MyVector<T>::Vector &MyVector<T>::operator%=(
+        const MyVector::Vector &other)
+{
+    return multiplyByElement(other);
 }
 
 template<typename T>
@@ -597,22 +647,22 @@ double angle(const MyVector<T> &first, const MyVector<T> &second)
     return first.angle(second);
 }
 
-template<typename T>
-MyVector<T> operator+(double number, const MyVector<T> &myVector)
+template<typename T, typename NumType>
+MyVector<T> operator+(const NumType &number, const MyVector<T> &myVector)
 {
     return myVector + number;
 }
 
 
-template<typename T>
-MyVector<T> operator-(double number, const MyVector<T> &myVector)
+template<typename T, typename NumType>
+MyVector<T> operator-(const NumType& number, const MyVector<T> &myVector)
 {
     return myVector - number;
 }
 
 
-template<typename T>
-MyVector<T> operator*(double number, const MyVector<T> &myVector)
+template<typename T, typename NumType>
+MyVector<T> operator*(const NumType& number, const MyVector<T> &myVector)
 {
     return myVector * number;
 }
@@ -631,7 +681,7 @@ double collinear(const MyVector<T> &first, const MyVector<T> &second)
 }
 
 template<typename T>
-double orthogonal(const MyVector<T> &first, const MyVector<T> &second)
+bool orthogonal(const MyVector<T> &first, const MyVector<T> &second)
 {
     return first.orthogonal(second);
 }

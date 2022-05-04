@@ -130,6 +130,13 @@ T *Iterator<T>::operator->()
                           ctime(&currTime));
     }
 
+    if (index >= maxIndex || index < 0)
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                          ctime(&currTime));
+    }
+
     return &(ptr.lock()[index]);
 }
 
@@ -143,6 +150,13 @@ const T &Iterator<T>::operator*() const
                           ctime(&currTime));
     }
 
+    if (index >= maxIndex || index < 0)
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+
     return ptr.lock()[index];
 }
 
@@ -154,6 +168,13 @@ const T *Iterator<T>::operator->() const
         time_t currTime = std::time(nullptr);
         throw DataExpired(__FILE__, typeid(*this).name(), __LINE__,
                           ctime(&currTime));
+    }
+
+    if (index >= maxIndex || index < 0)
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
     }
 
     return &(ptr.lock()[index]);

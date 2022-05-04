@@ -60,46 +60,76 @@ public:
     bool nequals(const Vector &vec) const;
 
     size_t size() const;
-    std::complex<double> length() const;
+
+    decltype(auto) length() const;
     double angle(const Vector &other) const;
 
     Vector operator+(const Vector &vec) const;
     Vector& operator+=(const Vector &other);
     Vector add(const Vector &vec) const;
-    void plus(const Vector &vec);
+    Vector& plus(const Vector &vec);
 
-    Vector operator+(double number) const;
-    Vector& operator+=(double number);
-    Vector add(double number) const;
-    void plus(double number);
+    template<typename NumType>
+    decltype(auto) operator+(const NumType &number) const;
+
+    template<typename NumType>
+    Vector& operator+=(const NumType &number);
+
+    template<typename NumType>
+    decltype(auto) add(const NumType &number) const;
+
+    template<typename NumType>
+    Vector& plus(const NumType &number);
 
     Vector operator-() const;
     Vector neg() const;
     void changeSign();
 
-    Vector operator-(const Vector &other) const;
+    template<typename OtherVector>
+    decltype(auto) operator-(const OtherVector &other) const;
     Vector& operator-=(const Vector &other);
-    Vector subtract(const Vector &other) const;
-    void minus(const Vector &other);
 
-    Vector operator-(double number) const;
-    Vector& operator-=(double number);
-    Vector subtract(double number) const;
-    void minus(double number);
+    template<typename OtherVector>
+    decltype(auto) subtract(const OtherVector &other) const;
+    Vector& minus(const Vector &other);
+
+    template<typename NumType>
+    decltype(auto) operator-(const NumType& number) const;
+
+    template<typename NumType>
+    Vector& operator-=(const NumType& number);
+
+    template<typename NumType>
+    decltype(auto) subtract(const NumType& number) const;
+
+    template<typename NumType>
+    Vector& minus(const NumType& number);
 
     Vector operator*(const Vector &other) const;
     Vector& operator*=(const Vector &other);
     Vector dotProduct(const Vector &other) const;
-    void multiplyByVector(const Vector &other) const;
+    Vector& multiplyByVector(const Vector &other) const;
 
-    Vector operator*(double number) const;
-    Vector& operator*=(double number);
-    Vector multiply(double number) const;
-    void multiplyByNumber(double number);
+    template<typename NumType>
+    decltype(auto) operator*(const NumType& number) const;
 
+    template<typename NumType>
+    Vector& operator*=(const NumType& number);
+
+    template<typename NumType>
+    Vector multiply(const NumType& number) const;
+
+    template<typename NumType>
+    Vector& multiplyByNumber(const NumType& number);
+
+    decltype(auto) operator&(const Vector &other) const;
+    decltype(auto) scalarProduct(const Vector &other) const;
+
+    Vector operator%(const Vector &other) const;
+    Vector& operator%=(const Vector &other);
     Vector elementMultiply(const Vector &other) const;
-    void multiplyByElement(const Vector &other);
-    double scalarProduct(const Vector &other) const;
+    Vector& multiplyByElement(const Vector &other);
+
     bool collinear(const Vector &other) const;
     bool orthogonal(const Vector &other) const;
 
@@ -124,10 +154,10 @@ template<typename T>
 double angle(const MyVector<T> &first, const MyVector<T> &second);
 
 template<typename T>
-double collinear(const MyVector<T> &first, const MyVector<T> &second);
+bool collinear(const MyVector<T> &first, const MyVector<T> &second);
 
 template<typename T>
-double orthogonal(const MyVector<T> &first, const MyVector<T> &second);
+bool orthogonal(const MyVector<T> &first, const MyVector<T> &second);
 
 template<typename T>
 MyVector<T> add(const MyVector<T> &first, const MyVector<T> &second);
@@ -135,14 +165,14 @@ MyVector<T> add(const MyVector<T> &first, const MyVector<T> &second);
 template<typename T>
 MyVector<T> subtract(const MyVector<T> &first, const MyVector<T> &second);
 
-template<typename T>
-MyVector<T> operator+(double number, const MyVector<T> &myVector);
+template<typename T, typename NumType>
+MyVector<T> operator+(const NumType &number, const MyVector<T> &myVector);
 
-template<typename T>
-MyVector<T> operator-(double number, const MyVector<T> &myVector);
+template<typename T, typename NumType>
+MyVector<T> operator-(const NumType &number, const MyVector<T> &myVector);
 
-template<typename T>
-MyVector<T> operator*(double number, const MyVector<T> &myVector);
+template<typename T, typename NumType>
+MyVector<T> operator*(const NumType &number, const MyVector<T> &myVector);
 
 #include "myvector.hpp"
 

@@ -6,14 +6,13 @@
 template <typename T>
 class MyVector;
 
-
 template <typename T>
 class Iterator : public BaseIterator<T>
 {
     using BaseIterator<T>::index;
     using BaseIterator<T>::maxIndex;
 public:
-    using iterator_category = std::random_access_iterator_tag;
+    using iterator_category = std::bidirectional_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = T;
     using pointer = std::weak_ptr<T[]>;
@@ -35,7 +34,7 @@ public:
     template<class NumType>
     Iterator<T> operator+(NumType num) const;
 
-    Iterator<T> &operator--();
+    Iterator<T>& operator--();
     Iterator<T> operator--(int);
 
     template<class NumType>
