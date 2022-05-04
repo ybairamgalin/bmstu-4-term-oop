@@ -4,12 +4,16 @@
 #include <string>
 #include <math.h>
 
+#include "errors.h"
+
 struct point3d
 {
     double x;
     double y;
     double z;
 };
+
+error_t readPointFromFile(point3d &point, std::ifstream &file);
 
 point3d *point3dCreate(const double x, const double y,
                        const double z);
