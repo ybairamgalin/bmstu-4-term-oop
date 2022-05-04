@@ -94,9 +94,40 @@ class BadAllocation : public MyVectorException
 {
 public:
     BadAllocation(const std::string& filename,
-                            const std::string& classname, int line, const char *time,
-                            const std::string& info = "Memory was not "
-                                                      "allocated") :
+                            const std::string& classname, int line,
+                            const char *time, const std::string& info =
+                                    "Memory was not allocated") :
+            MyVectorException(filename, classname,
+                              line, time, info) { }
+
+    [[nodiscard]] const char *what() const noexcept override
+    {
+        return errInfo.c_str();
+    }
+};
+
+class WrongDimensions : public MyVectorException
+{
+public:
+    WrongDimensions(const std::string& filename, const std::string& classname,
+                    int line, const char *time,
+                    const std::string& info = "Dot product requires 3d "
+                                              "vectors") :
+            MyVectorException(filename, classname,
+                              line, time, info) { }
+
+    [[nodiscard]] const char *what() const noexcept override
+    {
+        return errInfo.c_str();
+    }
+};
+
+class BadEpsValue : public MyVectorException
+{
+public:
+    BadEpsValue(const std::string& filename, const std::string& classname,
+                int line, const char *time,
+                const std::string& info = "Epsilon should be positive") :
             MyVectorException(filename, classname,
                               line, time, info) { }
 

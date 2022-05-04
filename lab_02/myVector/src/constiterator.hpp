@@ -6,20 +6,21 @@
 
 template<typename T>
 ConstIterator<T>::ConstIterator(const MyVector<T> &vector, size_t pos) :
-        ptr(vector.getData()), index(pos) { }
-
-template<typename T>
-ConstIterator<T>::ConstIterator(const ConstIterator<T> &iter) :
-        ptr(iter.ptr), index(iter.index) { }
-
-template<typename T>
-ConstIterator<T>::ConstIterator(ConstIterator<T> &&iter) noexcept :
-        ptr(iter.ptr), index(iter.index) { }
+        BaseIterator<T>(pos, vector.size()), ptr(vector.getData())
+{
+    if (pos > vector.size())
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+}
 
 template<typename T>
 ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &iter)
 {
     ptr = iter.ptr;
+    maxIndex = iter.maxIndex;
     index = iter.index;
 
     return *this;
@@ -28,6 +29,13 @@ ConstIterator<T> &ConstIterator<T>::operator=(const ConstIterator<T> &iter)
 template<typename T>
 ConstIterator<T> &ConstIterator<T>::operator++()
 {
+    if (index >= maxIndex)
+    {
+        time_t currTime = std::time(nullptr);
+        throw IndexOutOfRange(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+
     index++;
 
     return *this;
@@ -62,7 +70,7 @@ bool ConstIterator<T>::operator!=(const ConstIterator<T> &iter) const
 }
 
 template<typename T>
-const T &ConstIterator<T>::operator*()
+const T &ConstIterator<T>::operator*() const
 {
     if (ptr.expired())
     {
@@ -75,7 +83,7 @@ const T &ConstIterator<T>::operator*()
 }
 
 template<typename T>
-const T *ConstIterator<T>::operator->()
+const T *ConstIterator<T>::operator->() const
 {
     if (ptr.expired())
     {
@@ -85,6 +93,12 @@ const T *ConstIterator<T>::operator->()
     }
 
     return &(ptr.lock()[index]);
+}
+
+template<typename T>
+ConstIterator<T>::operator bool() const noexcept
+{
+    return !ptr.expired();
 }
 
 #endif //__CONST_ITERATOR_HPP

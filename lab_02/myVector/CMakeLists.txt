@@ -23,7 +23,9 @@ add_executable(myVectorGoogleTest
         inc/basecontainer.h
         inc/constiterator.h
         inc/myvectorexceptions.h
-        src/constiterator.hpp)
+        src/constiterator.hpp
+        inc/baseiterator.h
+        src/baseiterator.hpp)
 
 target_link_libraries(
         myVectorGoogleTest

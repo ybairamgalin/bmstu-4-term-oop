@@ -16,7 +16,7 @@ MyVector<T>::MyVector(size_t size)
 template<typename T>
 MyVector<T>::MyVector(const MyVector::Vector &vector)
 {
-    allocate(vector.capacity);
+    allocate(vector.sz);
     sz = vector.sz;
     std::copy_n(vector.cbegin(), sz, begin());
 }
@@ -39,7 +39,7 @@ MyVector<T>::MyVector(size_t size, const T *arr)
 template<typename T>
 MyVector<T> &MyVector<T>::operator=(const MyVector::Vector &vector)
 {
-    allocate(vector.capacity);
+    allocate(vector.sz);
     sz = vector.sz;
     std::copy_n(vector.cbegin(), sz, begin());
 
@@ -49,11 +49,38 @@ MyVector<T> &MyVector<T>::operator=(const MyVector::Vector &vector)
 template<typename T>
 MyVector<T> &MyVector<T>::operator=(MyVector::Vector &&vector) noexcept
 {
-    allocate(vector.capacity);
+    allocate(vector.s);
     sz = vector.sz;
     std::copy_n(vector.cbegin(), sz, begin());
 
     return *this;
+}
+
+template<typename T>
+typename MyVector<T>::Vector& MyVector<T>::operator=(
+        std::initializer_list<T> initializerList)
+{
+    if (initializerList.size() != size())
+        allocate(initializerList.size());
+
+    std::copy(initializerList.begin(), initializerList.end(), begin());
+}
+
+template<typename T>
+MyVector<T>::MyVector(std::initializer_list<T> initializerList)
+{
+    sz = initializerList.size();
+    allocate(sz);
+    std::copy(initializerList.begin(), initializerList.end(), begin());
+}
+
+template<typename T>
+template<typename InputIt>
+MyVector<T>::MyVector(InputIt first, InputIt last)
+{
+    sz = std::distance(first, last);
+    allocate(sz);
+    std::copy(first, last, begin());
 }
 
 template<typename T>
@@ -67,7 +94,6 @@ void MyVector<T>::clear()
 {
     data.reset();
     sz = 0;
-    capacity = 0; // TODO LOW-LVL?
 }
 
 template<typename T>
@@ -83,17 +109,6 @@ void MyVector<T>::allocate(size_t size)
         throw BadAllocation(__FILE__, typeid(*this).name(), __LINE__,
                                ctime(&currTime));
     }
-
-    capacity = size;
-}
-
-template<typename T>
-void MyVector<T>::pushBack(const T &value)
-{
-    if (sz >= capacity) // TODO
-        reallocate();
-
-    data[sz++] = value;
 }
 
 template<typename T>
@@ -121,7 +136,7 @@ typename MyVector<T>::CIter MyVector<T>::end() const
 }
 
 template<typename T>
-size_t MyVector<T>::size()
+size_t MyVector<T>::size() const
 {
     return sz;
 }
@@ -150,17 +165,6 @@ const T &MyVector<T>::operator[](size_t index) const
     }
 
     return *ConstIterator<T>(*this, index);
-}
-
-template<typename T>
-void MyVector<T>::reallocate()
-{
-    Vector tmp(*this);
-
-    capacity += allocationStep;
-    allocate(capacity);
-
-    std::copy(tmp.cbegin(), tmp.cend(), begin());
 }
 
 template<typename T>
@@ -195,6 +199,18 @@ bool MyVector<T>::operator==(const MyVector::Vector &vec) const
 }
 
 template<typename T>
+bool MyVector<T>::equals(const MyVector::Vector &vec) const
+{
+    return *this == vec;
+}
+
+template<typename T>
+bool MyVector<T>::nequals(const MyVector::Vector &vec) const
+{
+    return !equals(vec);
+}
+
+template<typename T>
 bool MyVector<T>::operator!=(const MyVector::Vector &vec) const
 {
     return !(*this == vec);
@@ -207,14 +223,28 @@ typename MyVector<T>::pointer MyVector<T>::getData() const
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator-()
+typename MyVector<T>::Vector MyVector<T>::operator-() const
 {
-    MyVector<T> newVector;
+    MyVector<T> newVector(sz);
+    Iter iter = newVector.begin();
 
-    for (auto element: *this)
-        newVector.pushBack(-element);
+    for (const auto &element: *this)
+        *(iter++) = -element;
 
     return newVector;
+}
+
+template<typename T>
+void MyVector<T>::changeSign()
+{
+    for (auto &element: *this)
+        element = -element;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::neg() const
+{
+    return -(*this);
 }
 
 template<typename T>
@@ -300,14 +330,33 @@ template<typename T>
 typename MyVector<T>::Vector MyVector<T>::operator*(
         const MyVector::Vector &other) const
 {
-    // TODO
+    if (sz != 3 || other.sz != 3)
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                                      ctime(&currTime));
+    }
+
+    MyVector<T> vector = {at(1) * other.at(2) - at(2) * other.at(1),
+                          at(2) * other.at(0) - at(0) * other.at(2),
+                          at(0) * other.at(1) - at(1) * other.at(0)};
+
+    return vector;
 }
 
 template<typename T>
 typename MyVector<T>::Vector &MyVector<T>::operator*=(
-        const MyVector::Vector &other) const
+        const MyVector::Vector &other)
 {
-    // TODO
+    if (sz != 3 || other.sz != 3)
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                                      ctime(&currTime));
+    }
+
+    MyVector<T> result = *this * other;
+    *this = result;
 }
 
 template<typename T>
@@ -352,15 +401,23 @@ double MyVector<T>::scalarProduct(const MyVector::Vector &other) const
 template<typename T>
 double MyVector<T>::angle(const MyVector::Vector &other) const
 {
-    double angleCos = scalarProduct(other) / (length() * other.length());
+    if (size() != other.size())
+    {
+        time_t currTime = std::time(nullptr);
+        throw InappropriateDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                                      ctime(&currTime));
+    }
+
+    double angleCos = scalarProduct(other) /
+            length().real() * other.length().real();
 
     return std::acos(angleCos);
 }
 
 template<typename T>
-double MyVector<T>::length() const
+std::complex<double> MyVector<T>::length() const
 {
-    double squaresSum = 0;
+    std::complex<double> squaresSum = 0;
 
     for (const auto &element: *this)
         squaresSum += element * element;
@@ -381,6 +438,153 @@ const T& MyVector<T>::at(size_t index) const
 }
 
 template<typename T>
+typename MyVector<T>::Vector MyVector<T>::add(const MyVector::Vector &vec) const
+{
+    return *this + vec;
+}
+
+template<typename T>
+void MyVector<T>::plus(const MyVector::Vector &vec)
+{
+    *this += vec;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::subtract(
+        const MyVector::Vector &other) const
+{
+    return *this - other;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::add(double number) const
+{
+    return *this + number;
+}
+
+template<typename T>
+void MyVector<T>::plus(double number)
+{
+    *this += number;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::subtract(double number) const
+{
+    return *this - number;
+}
+
+template<typename T>
+void MyVector<T>::minus(double number)
+{
+    *this -= number;
+}
+
+template<typename T>
+void MyVector<T>::minus(const MyVector::Vector &other)
+{
+    *this -= other;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::dotProduct(
+        const MyVector::Vector &other) const
+{
+    return *this * other;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::multiply(double number) const
+{
+    return *this *number;
+}
+
+template<typename T>
+void MyVector<T>::multiplyByNumber(double number)
+{
+    *this += number;
+}
+
+template<typename T>
+typename MyVector<T>::Vector MyVector<T>::elementMultiply(
+        const MyVector::Vector &other) const
+{
+    if (sz != other.sz)
+    {
+        time_t currTime = std::time(nullptr);
+        throw WrongDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                               ctime(&currTime));
+    }
+
+    MyVector<T> result(sz);
+    Iter resIter = result.begin();
+    CIter first = cbegin();
+    CIter second = other.cbegin();
+
+    for ( ; resIter != result.end(); ++resIter, ++first, ++second)
+        *resIter = *first * *second;
+
+    return result;
+}
+
+template<typename T>
+void MyVector<T>::multiplyByElement(const MyVector<T>::Vector &other)
+{
+    if (sz != other.sz)
+    {
+        time_t currTime = std::time(nullptr);
+        throw WrongDimensions(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+
+    Iter first = begin();
+    CIter second = other.cbegin();
+
+    for ( ; first != end(); ++first, ++second)
+        *first = *first * *second;
+}
+
+template<typename T>
+bool MyVector<T>::collinear(const MyVector::Vector &other) const
+{
+    double ang = angle(other);
+
+    return std::abs(ang) < eps ||
+           std::abs(ang - M_PI) < eps;
+}
+
+template<typename T>
+bool MyVector<T>::orthogonal(const MyVector::Vector &other) const
+{
+    return std::abs(angle(other) - M_PI_2) < eps;
+}
+
+template<typename T>
+void MyVector<T>::setEps(double value)
+{
+    if (value <= 0)
+    {
+        time_t currTime = std::time(nullptr);
+        throw BadEpsValue(__FILE__, typeid(*this).name(), __LINE__,
+                              ctime(&currTime));
+    }
+
+    eps = value;
+}
+
+template<typename T>
+double MyVector<T>::getEps() const noexcept
+{
+    return eps;
+}
+
+template<typename T>
+void MyVector<T>::multiplyByVector(const MyVector::Vector &other) const
+{
+    *this *= other;
+}
+
+template<typename T>
 double scalarProduct(const MyVector<T> &first, const MyVector<T> &second)
 {
     return first.scalarProduct(second);
@@ -391,6 +595,57 @@ template<typename T>
 double angle(const MyVector<T> &first, const MyVector<T> &second)
 {
     return first.angle(second);
+}
+
+template<typename T>
+MyVector<T> operator+(double number, const MyVector<T> &myVector)
+{
+    return myVector + number;
+}
+
+
+template<typename T>
+MyVector<T> operator-(double number, const MyVector<T> &myVector)
+{
+    return myVector - number;
+}
+
+
+template<typename T>
+MyVector<T> operator*(double number, const MyVector<T> &myVector)
+{
+    return myVector * number;
+}
+
+template<typename T>
+MyVector<T> elementMultiply(const MyVector<T> &first,
+                            const MyVector<T> &second)
+{
+    return first.elementMultiply(second);
+}
+
+template<typename T>
+double collinear(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first.collinear(second);
+}
+
+template<typename T>
+double orthogonal(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first.orthogonal(second);
+}
+
+template<typename T>
+MyVector<T> add(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first + second;
+}
+
+template<typename T>
+MyVector<T> subtract(const MyVector<T> &first, const MyVector<T> &second)
+{
+    return first - second;
 }
 
 #endif // _MY_VECTOR_HPP_
