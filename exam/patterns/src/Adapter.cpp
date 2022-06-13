@@ -3,13 +3,13 @@
 class MySqlConnection
 {
 public:
-    void mySqlInsert() { std::cout << "MY SQL INSERT\n"; };
+    void mySqlInsert() { std::cout << "MY SQL INSERT\n"; }
 };
 
 class PostgreSqlConnection
 {
 public:
-    void postgresInsert() { std::cout << "POSTGRES INSERT\n"};
+    void postgresInsert() { std::cout << "POSTGRES INSERT\n"; }
 };
 
 class BaseConnection
