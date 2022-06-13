@@ -61,17 +61,18 @@ public:
 class CarSolution
 {
 public:
-    CarSolution(std::string config) { this->config = config; }
-    AbstractCarFactory *getCreator()
+    CarSolution(std::string config)
     {
-        if (config == "BMW") return new BmwCarFactory;
-        if (config == "MERCEDES") return new MercedesCarFactory;
-
-        throw;
+        if (config == "BMW") creator = new BmwCarFactory;
+        else if (config == "MERCEDES") creator = new MercedesCarFactory;
+        else throw;
     }
+    ~CarSolution() { delete creator; };
+
+    AbstractCarFactory *getCreator() { return creator; }
 
 private:
-    std::string config;
+    AbstractCarFactory *creator;
 };
 
 int main()
@@ -84,6 +85,9 @@ int main()
     eng->info();
     wheel->info();
 
+    delete eng;
+    delete wheel;
+
     CarSolution newSolver = CarSolution("MERCEDES");
 
     eng = newSolver.getCreator()->createEngine();
@@ -91,6 +95,9 @@ int main()
 
     eng->info();
     wheel->info();
+
+    delete eng;
+    delete wheel;
 
     return 0;
 }
