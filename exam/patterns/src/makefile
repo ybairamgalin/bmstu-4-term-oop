@@ -1,5 +1,5 @@
 
-SRCS := FactoryMethod.exe
+SRCS := FactoryMethod.exe AbstractFactory.exe
 
 all : $(SRCS)
 
