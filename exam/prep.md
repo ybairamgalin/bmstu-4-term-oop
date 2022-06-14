@@ -5,6 +5,14 @@
     Приведение типов с помощью `static_cast, dynamic_cast, ...`,
     шаблон фабричный метод
 
+* __Лекция 12__
+
+  Паттерны
+
+* __Лекция 13__
+
+  Анекдот про возрастающтй ряд
+
 ## Шаблоны 
 Шаблон (паттерн) - готовое решение, но его приходится адаптировать под 
 конкретную задачу. При использовании паттернов код становится более читаемый 
@@ -440,7 +448,286 @@ int main()
 }
 
 ```
-#### Особенности 
+#### Особенности
 - Также применятся при расширении интерфейса, чтобы избежать приведение 
   типов
-### 
+  
+### Composite
+#### Проблема
+При организации иерархий объектов хочется работать с каким-то набором
+объектов как с одной сущностью (нпример, вращать фигуру также как и каждый 
+ее отдельный компонент)
+#### Идея
+Создать класс, производный от компонента, который будет содержать список 
+компонентов.
+
+Из лекций Тассова "Стоит расширить функционал базового класса, добавить
+туда методы `isComposite`, `add`, `remove`, `begin`, `end`"
+
+### Мост
+#### Проблема
+
+TODO
+
+#### Идея
+Отделить сущность от реализации и строить несколько независимых иерархий
+
+#### UML
+![img.png](patterns/uml/Bridge.png)
+
+#### Реализация
+
+TODO
+
+#### Особенности
+- иногда приходится выстраивать связь не между базовыми классами, а от дочернего
+к дочернему
+
+### Proxy
+#### Проблема
+Пусть есть запросы к базе данных и рядом поступают два похожих запроса.
+Выполняться каждый из них по отдельности может очень долго, соответсвенно
+в целях экономии памяти можно использовать результат выполнения предыдущего 
+запроса.
+#### Идея
+Перезватывать все запросы к сущности
+
+### Фасад
+#### Проблема
+Нужно обеспечить доступ к различным элементам программы, не вдаваясь в 
+подробности внутреннего устройства самой порограммы.
+#### Идея
+Скрыть все за фасадом)
+
+## Паттерны поведения
+### Декоратор
+#### Проблема
+Чтобы добавить поведение (методы) объекты приходится вносить изменение в уже 
+существующие классы
+#### Идея
+Добавить сущность, которая будет "декорировать" (добавлять дополнительные 
+методы) для уже существующего класса или иерархии классов.
+#### UML
+![img.png](patterns/uml/Decorator.png)
+#### Реализация
+Добавили машинам поведение - включение фар перед началом поездки.
+```c++
+#include <iostream>
+#include <memory>
+
+class Car
+{
+public:
+    virtual void driveForward() = 0;
+    virtual ~Car() = default;
+};
+
+class MercedesCar : public Car
+{
+public:
+    void driveForward() override { std::cout << "MERCEDES DRIVING\n"; }
+};
+
+class BmwCar : public Car
+{
+public:
+    void driveForward() override { std::cout << "BMW DRIVING\n"; }
+};
+
+class Decorator : public Car
+{
+private:
+    std::shared_ptr<Car> car;
+public:
+    Decorator(std::shared_ptr<Car> newCar) : car(newCar) { }
+    Decorator &operator=(Decorator &) = default;
+    void driveForward() override { car->driveForward(); }
+};
+
+class LightOnDecorator : public Decorator
+{
+public:
+    LightOnDecorator(std::shared_ptr<Car> newCar) : Decorator(newCar) { }
+    void driveForward() override
+    {
+        std::cout << "LIGHT IS ON\n";
+        Decorator::driveForward();
+    }
+};
+
+int main()
+{
+    std::shared_ptr<Car> car1 = std::make_shared<MercedesCar>();
+    std::shared_ptr<Car> car2 = std::make_shared<BmwCar>();
+
+    car1->driveForward();
+    car2->driveForward();
+
+    car1 = std::make_shared<LightOnDecorator>(car1);
+    car1->driveForward();
+
+    car2 = std::make_shared<LightOnDecorator>(car2);
+    car2->driveForward();
+}
+```
+### Стратегия
+#### Особенности
+- При реализации стоит учитывать, что какие то части алгоритма могут быть 
+  общими. Для того, чтобы избежать дублирования кода можно навесить 
+  декоратор/выделить общие части стратегии в другую стратегию.
+- По большей части используется вместе в адаптером, так как необходимо
+предоставить общий интерфейс взаимойдействия с данными
+  
+### Команда
+
+### Цепочка обязанностей
+
+#### Идея
+Создать коллекцию обработчиков (вероятнее всего связный список). При поступлении 
+запроса конкретному обрабочику смотреть, может ли конкретный обработчик 
+обработать ситуацию. Если не может, то передать данные в следующий обработчик 
+который будет принимать дальнешие решения обработки данных.
+
+#### UML
+![img.png](patterns/uml/ChainOfResponsability.png)
+
+### Посредник
+
+#### Проблема
+Оргиназовать общение между объектами, которые не знают друг о друге ничего 
+конкретного
+
+#### Идея
+
+Реализовать посредника, который будет как раз и заниматься пересылкой данных 
+между объектами.
+
+#### UML
+
+![img.png](patterns/uml/Mediator.png)
+
+#### Реализция
+```c++
+#include <iostream>
+
+class Colleague;
+
+class Mediator
+{
+public:
+    virtual void sendMessage(const std::string &message, Colleague *sender) = 0;
+};
+
+class Colleague
+{
+public:
+    explicit Colleague(Mediator *mediator) : mediator(mediator) { }
+
+    virtual void receiveMessage(const std::string &message)
+    {
+        std::cout << message << std::endl;
+    }
+
+    virtual void sendMessage(const std::string &message)
+    {
+        mediator->sendMessage(message, this);
+    }
+protected:
+    Mediator *mediator;
+};
+
+class Bob : public Colleague
+{
+public:
+    Bob(Mediator *mediator) : Colleague(mediator) { }
+
+    void receiveMessage(const std::string &message) override
+    {
+        std::cout << "Bob received message";
+        Colleague::receiveMessage(message);
+    }
+    void sendMessage(const std::string &message) override
+    {
+        std::cout << "Bob sent message: " << message << std::endl;
+        Colleague::sendMessage(message);
+    }
+};
+
+class John : public Colleague
+{
+public:
+    John(Mediator *mediator) : Colleague(mediator) { }
+
+    void receiveMessage(const std::string &message) override
+    {
+        std::cout << "John received message: ";
+        Colleague::receiveMessage(message);
+    }
+    void sendMessage(const std::string &message) override
+    {
+        std::cout << "John sent message:" << message << std::endl;
+        Colleague::sendMessage(message);
+    }
+};
+
+class ConcreteMediator : public Mediator
+{
+public:
+    void setColleagues(Colleague *colleague1, Colleague *colleague2)
+    {
+        c1 = colleague1;
+        c2 = colleague2;
+    }
+
+    void sendMessage(const std::string &message, Colleague *sender) override
+    {
+        if (c1 == sender)
+            c2->receiveMessage(message);
+        else if (c2 == sender)
+            c1->receiveMessage(message);
+        else
+            throw;
+    }
+private:
+    Colleague* c1;
+    Colleague* c2;
+};
+
+int main()
+{
+    ConcreteMediator *mediator = new ConcreteMediator();
+
+    Bob *bob = new Bob(mediator);
+    John *john = new John(mediator);
+
+    mediator->setColleagues(bob, john);
+
+    bob->sendMessage("HEY THERE!, I'M BOB");
+    john->sendMessage("LA LA LA");
+
+    return 0;
+}
+```
+
+## Дизайн
+### Рекурсивный дизайн
+Прием, который помогает расширять функционал через наследование
+```c++
+class A
+{
+public:
+    virtual void draw() { /* ... */ }
+};
+
+class B : public A
+{
+public:
+    void draw() override
+    {
+        A::draw();
+        _draw();
+    }
+private:
+    _draw();    
+};
+```
