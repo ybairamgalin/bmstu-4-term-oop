@@ -1,5 +1,5 @@
 
-SRCS := FactoryMethod.exe AbstractFactory.exe Prototype.exe Builder.exe Adapter.exe Decorator.exe Mediator.exe Visitor.exe
+SRCS := FactoryMethod.exe AbstractFactory.exe Prototype.exe Builder.exe Adapter.exe Decorator.exe Mediator.exe Visitor.exe Momento.exe
 
 .PHONY : all clean
 all : $(SRCS)
