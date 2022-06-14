@@ -16,7 +16,7 @@ class BaseConnection
 {
 public:
     virtual void insert() = 0;
-};пше
+};
 
 
 class MySqlAdapter : public BaseConnection
