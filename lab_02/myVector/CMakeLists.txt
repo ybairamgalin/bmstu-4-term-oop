@@ -4,9 +4,9 @@ project(myVector)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-set(CMAKE_CXX_FLAGS "-Wall")
-set(CMAKE_CXX_FLAGS "-Werror")
+#
+#set(CMAKE_CXX_FLAGS "-Wall")
+#set(CMAKE_CXX_FLAGS "-Werror")
 
 include_directories(inc)
 include_directories(src)

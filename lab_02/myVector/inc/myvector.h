@@ -64,10 +64,17 @@ public:
     decltype(auto) length() const;
     double angle(const Vector &other) const;
 
-    Vector operator+(const Vector &vec) const;
-    Vector& operator+=(const Vector &other);
-    Vector add(const Vector &vec) const;
-    Vector& plus(const Vector &vec);
+    template<typename OtherVector>
+    decltype(auto) operator+(const MyVector<OtherVector> &vec) const;
+
+    template<typename OtherVector>
+    Vector& operator+=(const MyVector<OtherVector> &other);
+
+    template<typename OtherVector>
+    decltype(auto) add(const MyVector<OtherVector> &vec) const;
+
+    template<typename OtherVector>
+    Vector& plus(const MyVector<OtherVector> &vec);
 
     template<typename NumType>
     decltype(auto) operator+(const NumType &number) const;
@@ -86,11 +93,13 @@ public:
     void changeSign();
 
     template<typename OtherVector>
-    decltype(auto) operator-(const OtherVector &other) const;
-    Vector& operator-=(const Vector &other);
+    decltype(auto) operator-(const MyVector<OtherVector> &other) const;
 
     template<typename OtherVector>
-    decltype(auto) subtract(const OtherVector &other) const;
+    Vector& operator-=(const MyVector<OtherVector> &other);
+
+    template<typename OtherVector>
+    decltype(auto) subtract(const MyVector<OtherVector> &other) const;
     Vector& minus(const Vector &other);
 
     template<typename NumType>

@@ -9,6 +9,13 @@
 template<typename T>
 MyVector<T>::MyVector(size_t size)
 {
+    if (size == 0)
+    {
+        time_t currTime = std::time(nullptr);
+        throw EmptyVector(__FILE__, typeid(*this).name(), __LINE__,
+                               ctime(&currTime));
+    }
+
     sz = size;
     allocate(size);
 }
@@ -248,18 +255,20 @@ typename MyVector<T>::Vector MyVector<T>::neg() const
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::operator+(
-        const MyVector::Vector &vec) const
+template<typename OtherVector>
+decltype(auto) MyVector<T>::operator+(
+        const MyVector<OtherVector> &vec) const
 {
-    MyVector<T> newVector(*this);
+    MyVector<decltype(this->at(0) + vec.at(0))> newVector(*this);
     newVector += vec;
 
     return newVector;
 }
 
 template<typename T>
+template<typename OtherVector>
 typename MyVector<T>::Vector &MyVector<T>::operator+=(
-        const MyVector::Vector &other)
+        const MyVector<OtherVector> &other)
 {
     if (sz != other.sz)
     {
@@ -278,16 +287,8 @@ typename MyVector<T>::Vector &MyVector<T>::operator+=(
 
 template<typename T>
 template<typename OtherVector>
-decltype(auto) MyVector<T>::operator-(
-        const OtherVector &other) const
-{
-    return *this + (-other);
-}
-
-template<typename T>
-template<typename OtherVector>
-typename MyVector<T>::Vector &MyVector<T>::operator-=(
-        const OtherVector &other)
+typename MyVector<T>::Vector& MyVector<T>::operator-=(
+        const MyVector<OtherVector> &other)
 {
     *this += -other;
 
@@ -298,7 +299,7 @@ template<typename T>
 template<typename NumType>
 decltype(auto) MyVector<T>::operator+(const NumType& number) const
 {
-    MyVector<T> newVector(*this);
+    MyVector<decltype(this->at(0) + number)> newVector(*this);
 
     for (auto &element: newVector)
         element += number;
@@ -369,7 +370,7 @@ template<typename T>
 template<typename NumType>
 decltype(auto) MyVector<T>::operator*(const NumType& number) const
 {
-    MyVector<T> newVector(*this);
+    MyVector<decltype(this->at(0) + number)> newVector(*this);
 
     for (auto &element: newVector)
         element *= number;
@@ -446,13 +447,15 @@ const T& MyVector<T>::at(size_t index) const
 }
 
 template<typename T>
-typename MyVector<T>::Vector MyVector<T>::add(const MyVector::Vector &vec) const
+template<typename OtherVector>
+decltype(auto) MyVector<T>::add(const MyVector<OtherVector> &vec) const
 {
     return *this + vec;
 }
 
 template<typename T>
-typename MyVector<T>::Vector& MyVector<T>::plus(const MyVector::Vector &vec)
+template<typename OtherVector>
+typename MyVector<T>::Vector& MyVector<T>::plus(const MyVector<OtherVector> &vec)
 {
     *this += vec;
 
@@ -460,8 +463,9 @@ typename MyVector<T>::Vector& MyVector<T>::plus(const MyVector::Vector &vec)
 }
 
 template<typename T>
+template<typename OtherVector>
 decltype(auto) MyVector<T>::subtract(
-        const MyVector::Vector &other) const
+        const MyVector<OtherVector> &other) const
 {
     return *this - other;
 }
@@ -632,6 +636,13 @@ typename MyVector<T>::Vector &MyVector<T>::operator%=(
         const MyVector::Vector &other)
 {
     return multiplyByElement(other);
+}
+
+template<typename T>
+template<typename OtherVector>
+decltype(auto) MyVector<T>::operator-(const MyVector<OtherVector> &other) const
+{
+    return *this + (-other);
 }
 
 template<typename T>
